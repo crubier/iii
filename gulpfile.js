@@ -39,9 +39,9 @@ gulp.task ('test',['lib'],function() {
     pattern: ['lib/*.js']
   }))
   .pipe(mocha({reporter:'min'}))
-  .pipe(cover.report({
-    outFile: 'coverage.html'
-  }))
+  .pipe(cover.gather())
+  .pipe(cover.format( [ { reporter: 'html', outFile: 'coverage.html' }, { reporter: 'json', outFile: 'coverage.json' } ]))
+  .pipe(gulp.dest('doc'))
   .on("error",onError);
 });
 

@@ -9,6 +9,7 @@
   "directories": {
     "test": "test",
     "lib": "lib",
+    "doc":"doc",
     "example": "example"
   },
   "files": [

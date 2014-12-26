@@ -64,8 +64,6 @@ describe('Parser',function(){
       assert.equal('number',parsed[0].args[3].type.datatype.union[0].record[1].value.base);
       assert.equal('text',parsed[0].args[3].type.datatype.union[1].base);
     });
-
-
   });
 });
 
