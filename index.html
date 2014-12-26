@@ -1,0 +1,1802 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="III : The language of interaction">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>III</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/crubier/iii">View on GitHub</a>
+
+          <h1 id="project_title">III</h1>
+          <h2 id="project_tagline">The language of interaction</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/crubier/iii/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/crubier/iii/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a id="iiijs" class="anchor" href="#iiijs" aria-hidden="true"><span class="octicon octicon-link"></span></a>III.js</h1>
+
+<p>A simple language to describe interactive systems.</p>
+
+<p>Programming languages are nice for <strong>computations</strong>. However, describing interactions with programming languages is <strong>painful</strong>. We need a language for <strong>interactions</strong>. That is what III is for.</p>
+
+<p>Forget about programming, just describe interactions and let III do the rest.</p>
+
+<p>This document contains the following sections:</p>
+
+<ul>
+<li><a href="#tutorial">Tutorial</a></li>
+<li><a href="#base-interactions-semantics">Base Interactions semantics</a></li>
+<li><a href="#advanced-interactions-semantics">Advanced Interactions semantics</a></li>
+<li><a href="#example">Example</a></li>
+</ul>
+
+<h2>
+<a id="tutorial" class="anchor" href="#tutorial" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tutorial</h2>
+
+<p>This tutorial will cover the basic features of the III Language:</p>
+
+<ul>
+<li><a href="#focus-on-interactions">Focus on interactions</a></li>
+<li><a href="#simple-syntax">Simple syntax</a></li>
+<li><a href="#synchronous-execution">Synchronous execution</a></li>
+<li>
+<a href="#interaction-activation">Interaction activation</a><br>
+</li>
+<li><a href="#emissions-and-receptions">Emissions and Receptions</a></li>
+<li><a href="#base-data-types">Base data types</a></li>
+<li><a href="#complex-data-types">Complex data types</a></li>
+</ul>
+
+<h3>
+<a id="focus-on-interactions" class="anchor" href="#focus-on-interactions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Focus on interactions</h3>
+
+<p>A III system represent one <em>interaction</em>. An <em>interaction</em> can be composed of several simpler <em>interactions</em>. This means that any III system is a composition of <em>interactions</em>. In fact, in III, pretty much everything is an interaction. Conditionals, assignments, variables... Everything is represented as <em>interactions</em>.</p>
+
+<h4>
+<a id="rationale" class="anchor" href="#rationale" aria-hidden="true"><span class="octicon octicon-link"></span></a>Rationale</h4>
+
+<p>Since we want to describe interactive systems, the only entity that adds value to the description is the interaction. We are interested only in aspects relevant to the <em>interaction</em> of systems. The details of the <em>computations</em> are not relevant for our purpose, so they are defered to other languages.</p>
+
+<h3>
+<a id="simple-syntax" class="anchor" href="#simple-syntax" aria-hidden="true"><span class="octicon octicon-link"></span></a>Simple syntax</h3>
+
+<p>Thanks to the over-use of parentheses, the expression grammar of III is really simple:</p>
+
+<p>expression  :=   '(' element* ')'
+element     :=   expression | identifier
+identifier  :=   anything without parentheses</p>
+
+<p>Said simply, an expression is a sequence of identifiers and sub-expressions, enclosed in parentheses. Here is an example expression in III:</p>
+
+<p>( when (anEvent) do ( (this) and (that) ) )</p>
+
+<p>But, you ask, how do we know which operator an expression refers to? Well, this is simple: the name of the operator of an expression is the concatenation of its identifiers, with sub-expressions replaced by <code>$</code>. <code>$</code> stands for <em>"something"</em>. For example the expression <code>((a)+(b))</code> uses the operator <code>$+$</code>, pronounced <em>"something plus something"</em>.</p>
+
+<p>To make a parallel with a more classical way to represent expressions, the above expression would usually be represented as :</p>
+
+<p>when$do$(anEvent,$and$(this,that))</p>
+
+<h4>
+<a id="rationale-1" class="anchor" href="#rationale-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Rationale</h4>
+
+<p>Why such an unusual syntax ?</p>
+
+<p>First, the resulting syntax is very general, and similar to natural language, just with a lot of additional parentheses. These parentheses are made invisible when editing the code in an appropriate IDE, which makes reading III as easy as reading natural language.</p>
+
+<p>There is only one syntax for all: All these <em>prefix</em> operators like <code>!a</code>, <em>infix</em> operators like <code>a + b</code>, <em>postfix</em> operators like <code>i++</code>, <em>named</em> operators like <code>sin(x)</code> are represented the same way. This should hopefully make III easier to understand for beginnners.</p>
+
+<p>Finally, this syntax takes the current evolution of programming languages to its logical conclusion. For example, it generalizes the notion of <em>Named function parameters</em> as used in Apple's <em>Swift Programming Language</em>, and in Microsoft's <em>C#</em>. Javascript developpers also use <em>argument maps</em> instead of <em>positional arguments</em>. Here is a table comparing different programming languages:</p>
+
+<table>
+<thead>
+<tr>
+<th>Language</th>
+<th>Expression</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C, Java</td>
+<td><code>CalculateBMI(83,185)</code></td>
+</tr>
+<tr>
+<td>Javascript</td>
+<td><code>CalculateBMI({weight:83,height:185})</code></td>
+</tr>
+<tr>
+<td>C#, Swift</td>
+<td><code>CalculateBMI(weigth:83,height:185)</code></td>
+</tr>
+<tr>
+<td>III (Simple)</td>
+<td><code>(BMI (83)kg (185)cm)</code></td>
+</tr>
+<tr>
+<td>III (Verbose)</td>
+<td><code>(Body Mass Index of someone who weights (83) kg and is (185) cm high)</code></td>
+</tr>
+</tbody>
+</table>
+
+<p>Note how III's syntax allows expressions to be much clearer on their semantics. For example, expected units of parameters are only expressed in III.</p>
+
+<h3>
+<a id="synchronous-execution" class="anchor" href="#synchronous-execution" aria-hidden="true"><span class="octicon octicon-link"></span></a>Synchronous execution</h3>
+
+<p>III systems are synchronous. This means that interactions are evaluated at discrete points in time, all at once. For example, the expression:</p>
+
+<p>( when (anEvent) do ( (output) = (5) ) )</p>
+
+<p>Will be evaluated at discrete points in time, called steps. Every expression of this composed expression will be evaluated at every step. For instance, here is a simplified execution, which does <strong>not</strong> actually comply to the actual semantics of the language:</p>
+
+<table>
+<thead>
+<tr>
+<th align="center">Step</th>
+<th align="center">anEvent</th>
+<th align="center">output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="center"><code>no</code></td>
+<td align="center"><code>~</code></td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center"><code>yes</code></td>
+<td align="center"><code>5</code></td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center"><code>no</code></td>
+<td align="center"><code>~</code></td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center"><code>yes</code></td>
+<td align="center"><code>5</code></td>
+</tr>
+</tbody>
+</table>
+
+<h4>
+<a id="rationale-2" class="anchor" href="#rationale-2" aria-hidden="true"><span class="octicon octicon-link"></span></a>Rationale</h4>
+
+<p>Synchronous execution avoids spaghetti behaviours. The state of the system is explicitly defined for each execution step. This makes reasoning about code much simpler.</p>
+
+<p>Synchronous execution also makes verification much easier.</p>
+
+<h3>
+<a id="interaction-activation" class="anchor" href="#interaction-activation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Interaction activation</h3>
+
+<p>Behind the scenes, data is represented as a couples <em>&lt; activation, value &gt;</em>, where:</p>
+
+<ul>
+<li>
+<em>activation</em> is a boolean.</li>
+<li>
+<em>value</em> has a type. We will explain values and types later.</li>
+</ul>
+
+<p>This means that every expression, every sub-expression is  actually a couple <em>&lt; activation, value &gt; _. Even the assignment, <code>$=$</code>, is a couple _&lt; activation, value&gt;</em>.</p>
+
+<p>An interaction's <em>activation</em> represents the fact that the interaction exists and is active at a point in time, or not. For example, if an interaction represents an event, then it will only be activated when the event happens. As another example, the assignment interaction <code>$=$</code> is only effective when its <em>activation</em> is <em>true</em>. If an interaction's <em>value</em> is not defined anywhere, then its <em>activation</em> is <em>false</em>.</p>
+
+<p>If an interaction activation is false, we write its value as <strong>~</strong>. Here is a table showing a few examples:</p>
+
+<table>
+<thead>
+<tr>
+<th>Couple</th>
+<th>Notation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>&lt; true, 0 &gt;</em></td>
+<td>0</td>
+</tr>
+<tr>
+<td><em>&lt; true, 1 &gt;</em></td>
+<td>1</td>
+</tr>
+<tr>
+<td><em>&lt; true, true &gt;</em></td>
+<td>true</td>
+</tr>
+<tr>
+<td><em>&lt; true, "text" &gt;</em></td>
+<td>"text"</td>
+</tr>
+<tr>
+<td><em>&lt; false, 0 &gt;</em></td>
+<td>~</td>
+</tr>
+<tr>
+<td><em>&lt; false, 3 &gt;</em></td>
+<td>~</td>
+</tr>
+<tr>
+<td><em>&lt; false, "text" &gt;</em></td>
+<td>~</td>
+</tr>
+<tr>
+<td><em>&lt; false, true &gt;</em></td>
+<td>~</td>
+</tr>
+</tbody>
+</table>
+
+<h4>
+<a id="rationale-3" class="anchor" href="#rationale-3" aria-hidden="true"><span class="octicon octicon-link"></span></a>Rationale</h4>
+
+<p>In previous approaches, and in some other languages, a difference is made between <em>events</em> and <em>flows</em>, which are considered as two different first-class entities.</p>
+
+<p>In these approaches, <em>events</em> represent data defined at discrete points in time, while <em>flows</em> represent data defined on continuous time intervals. But when we think about it, the only difference between an <em>event</em> and a <em>flow</em> lies in the domain of the <em>time → value</em> function. For <em>events</em> this set is discrete. For <em>flows</em> this set is continuous.</p>
+
+<p>The logical conclusion of this remark is that the merger of these two concepts needs to include the indicator function of the domain of the <em>time → value</em> function. This indicator function is the <code>activation</code>, while the <em>time → value</em> function is the <code>value</code>.</p>
+
+<h3>
+<a id="emissions-and-receptions" class="anchor" href="#emissions-and-receptions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Emissions and Receptions</h3>
+
+<p>Interactions can represent <em>reception</em> of data, they are then called <code>reception</code>. Receptions are really similar to functions in other programming languages. Like functions, they take data in, compute and <em>return</em> a value, without side effect. Receptions are the things which are on the right-hand side of assignments.</p>
+
+<p>Interactions can also represent <em>emission</em> of data, they are then called <code>emission</code>. Emissions are the opposite of receptions. As a consequence, experienced coders struggle to understand emissions at first. The data flow in emissions is the exact opposite of the data flow in receptions. Instead of <em>returning</em> a value, receptions are <em>given</em> a value; instead of being <em>given</em> arguments values, emissions <em>return</em> values for their arguments. Emissions are the things which are on the left-hand side of assignments.</p>
+
+<p>Some interactions represent both <em>reception</em> and <em>emission</em> are just called <code>interaction</code>. They can emit and receive data. Typically, only state variables are <code>interactions</code>. Inputs of the system are <code>receptions</code> and outputs are <code>emissions</code>. But <code>emissions</code> are not necessarily <code>outputs</code>, and <code>receptions</code> are not necessarily <code>inputs</code>. They can be internal.</p>
+
+<p>As a first example, look at the following interaction:</p>
+
+<p>( when (anEvent) : ( (theOutput) = (5) ) )</p>
+
+<p>In this interaction, <code>anEvent</code> is a <code>reception</code>, while <code>theOutput</code> is an <code>emission</code>. But that is not all ! Remember, everything is an interaction ! Here is the complete table of interactions of this example:</p>
+
+<table>
+<thead>
+<tr>
+<th align="center">Interaction</th>
+<th align="center">Type</th>
+<th align="center">Kind</th>
+<th align="center">Operator</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><code>(anEvent)</code></td>
+<td align="center"><code>void</code></td>
+<td align="center"><code>reception</code></td>
+<td align="center"><code>anEvent</code></td>
+</tr>
+<tr>
+<td align="center"><code>(5)</code></td>
+<td align="center"><code>number</code></td>
+<td align="center"><code>reception</code></td>
+<td align="center"><code>5</code></td>
+</tr>
+<tr>
+<td align="center"><code>(theOutput)</code></td>
+<td align="center"><code>number</code></td>
+<td align="center"><code>emission</code></td>
+<td align="center"><code>theOutput</code></td>
+</tr>
+<tr>
+<td align="center"><code>((theOutput) = (5))</code></td>
+<td align="center"><code>void</code></td>
+<td align="center"><code>emission</code></td>
+<td align="center"><code>$=$</code></td>
+</tr>
+<tr>
+<td align="center"><code>( when (anEvent) : ( (theOutput) = (5) ) )</code></td>
+<td align="center"><code>void</code></td>
+<td align="center"><code>emission</code></td>
+<td align="center"><code>when$:$</code></td>
+</tr>
+</tbody>
+</table>
+
+<h4>
+<a id="rationale-4" class="anchor" href="#rationale-4" aria-hidden="true"><span class="octicon octicon-link"></span></a>Rationale</h4>
+
+<p>Again, this language feature is taking evolutions of languages to its natural conclusion.
+Here is a table presenting the evolution of how different programming languages treat assignments:</p>
+
+<table>
+<thead>
+<tr>
+<th align="center">Language</th>
+<th align="center">Expression</th>
+<th align="center">Remark</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">Assembly</td>
+<td align="center"><code>cpy res, a; add res, b;</code></td>
+<td align="center">Expressions cannot be nested at all</td>
+</tr>
+<tr>
+<td align="center">C, Java</td>
+<td align="center"><code>res = a + ( b * c );</code></td>
+<td align="center">Arbitrary expressions on the right hand side of assignment, only variable names on the left hand side</td>
+</tr>
+<tr>
+<td align="center">JS ES6</td>
+<td align="center"><code>{ x, y } = f(a,(b+c));</code></td>
+<td align="center">Arbitrary expressions on the right hand side of assignment, restricted subset of expressions on the left hand side</td>
+</tr>
+<tr>
+<td align="center">III</td>
+<td align="center"><code>( ( (x) or (y) ) = ( (a) + (b) ) )</code></td>
+<td align="center">Arbitrary expressions on both sides of the assignment</td>
+</tr>
+</tbody>
+</table>
+
+<p>This shows that the <em>emission</em> / <em>reception</em> paradigm is a generalisation of current evolutions of programming languages, such as the destructuring assignment.</p>
+
+<h3>
+<a id="base-data-types" class="anchor" href="#base-data-types" aria-hidden="true"><span class="octicon octicon-link"></span></a>Base data types</h3>
+
+<p>There are few different base types:</p>
+
+<p>| Type | Description | Example literals |
+| --- | -- | -- |
+| <code>void</code> | Bottom type, carries no data except activation information | <code>active</code>, <code>~</code> |
+| <code>boolean</code> | When active it can be either true or false   | <code>true</code>,<code>false</code>, <code>~</code> |
+| <code>number</code> | Can be an integer or a float  | <code>0</code>,<code>1.</code>,<code>13.37</code>,<code>-42</code>, <code>~</code> |
+| <code>text</code> | Any sequence of unicode characters  | <code>"foo"</code>, <code>"this is a text"</code>, <code>~</code> |</p>
+
+<h4>
+<a id="rationale-5" class="anchor" href="#rationale-5" aria-hidden="true"><span class="octicon octicon-link"></span></a>Rationale</h4>
+
+<p>Do we need more ? The user can always define custom enumerated types, so we should be ok like that. Booleans are not even necessary.</p>
+
+<h3>
+<a id="complex-data-types" class="anchor" href="#complex-data-types" aria-hidden="true"><span class="octicon octicon-link"></span></a>Complex data types</h3>
+
+<p>There are different constructions for complex types:</p>
+
+<p>| Type | Description | Example type |
+| --- | -- | -- |
+| <code>[ &lt;type1&gt;, &lt;type2&gt; ]</code> | Tuples are combinations of a fixed number of different types in a certain order| <code>[boolean,number,number]</code>, <code>[number,text]</code> |
+| <code>{ name1:&lt;type1&gt;, name2:&lt;type2&gt; }</code> | Objects are tuples whose elements are identified by name instead of position  | <code>{x:number,y:number}</code>,<code>{id:text,value:number}</code>|</p>
+
+<p>The following complex data types may one day be implemented in III:</p>
+
+<p>| Type | Description | Example type |
+| --- | -- | -- |
+| <code>[ &lt;type1&gt;... ]</code> | <strong>(Not implemented)</strong> Arrays are combinations of variable number of identical types  | <code>[number...]</code>,<code>[text...]</code>|
+| <code>{ &lt;typekey&gt;:&lt;typevalue&gt;... }</code> | <strong>(Not implemented)</strong> Maps are arrays whose elements are identified by name instead of position  | <code>{text:number...}</code>,<code>{number:text...}</code>|
+| <code>[ &lt;type1&gt; or &lt;type2&gt; ]</code>| <strong>(Not implemented)</strong> Unions are tuples with only one value active at a time | <code>[ text or number ]</code>, <code>[ {x:number, y:number} or number ]</code>  |
+| <code>[  &lt;type1&gt; → &lt;type2&gt; ]</code>| <strong>(Not implemented)</strong> Pure functions with domain type1, codomain type2, and no side effects | <code>[number → text]</code>, <code>[void → number]</code>  |</p>
+
+<h4>
+<a id="tuples" class="anchor" href="#tuples" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tuples</h4>
+
+<p>For each Tuple type, a set of emissions and receptions are defined. For example, the type:</p>
+
+<p>data myType : [ ,  ]</p>
+
+<p>Will generate the following emissions and receptions, lazily at compile-time:</p>
+
+<ul>
+<li>Decomposing receptions (example use: <code>x = a[1]</code>)</li>
+<li><code>&lt;type1&gt; reception ( (myType reception x) [1] )</code></li>
+<li><code>&lt;type2&gt; reception ( (myType reception y) [2] )</code></li>
+<li>Decomposing emissions (example use: <code>a[1] = x</code>)</li>
+<li><code>&lt;type1&gt; emission ( (myType emission x) [1] )</code></li>
+<li><code>&lt;type2&gt; emission ( (myType emission y) [2] )</code></li>
+<li>Composing receptions : (example use: <code>a = [x,y]</code>)</li>
+<li><code>myType reception ( [ (&lt;type1&gt; reception x) , (&lt;type2&gt; reception y) ] )</code></li>
+<li>Composing emissions : (example use: <code>[x,y] = a</code>)</li>
+<li><code>myType emission ( [ (&lt;type1&gt; emission x) , (&lt;type2&gt; emission y) ] )</code></li>
+</ul>
+
+<p>These definitions allow to write such things:</p>
+
+<p>[ a, [b, c] ] = [ 3, [4, 5] ]</p>
+
+<p>Which is equivalent to:</p>
+
+<p>a = 3; b = 4; c = 5;</p>
+
+<h4>
+<a id="objects" class="anchor" href="#objects" aria-hidden="true"><span class="octicon octicon-link"></span></a>Objects</h4>
+
+<p>Similarly, objects are interactions, so they can be received and emitted</p>
+
+<p>{ weight:a, height:b } = { weight:83, height:184 }</p>
+
+<p>is equivalent to:</p>
+
+<p>a = 83; b = 184;</p>
+
+<p>Any composition of complex types is an interaction, so this is possible:</p>
+
+<p>[{name:nameOfTheHeaviest,weight:maxWeight},...] = ( sort by weight ([{name:"toto",weight:50},{name:"titi",weight:75}]) )</p>
+
+<p>is equivalent to:</p>
+
+<p>nameOfTheHeaviest="titi"; maxWeight=75;</p>
+
+<h4>
+<a id="rationale-6" class="anchor" href="#rationale-6" aria-hidden="true"><span class="octicon octicon-link"></span></a>Rationale</h4>
+
+<p>Interaction involve exchange of complex data. Complex data should be part of the language.</p>
+
+<p>In combination with other languages features, complex data types enable very expressive code.</p>
+
+<h3>
+<a id="data-type-vs-channel-type" class="anchor" href="#data-type-vs-channel-type" aria-hidden="true"><span class="octicon octicon-link"></span></a>Data type vs Channel type</h3>
+
+<p>Types :</p>
+
+<ul>
+<li>
+<p>bottom type : <code>activation</code> = <code>{}</code> = <code>()</code> = <code>[]</code></p>
+
+<ul>
+<li>enumeration : <code>enum(literal1,literal2,literal3)</code>
+</li>
+<li>boolean : <code>boolean</code>
+</li>
+<li>number : <code>number</code>
+</li>
+<li>text : <code>text</code>
+</li>
+<li>tuples : <code>(&lt;type1&gt;,&lt;type2&gt;)</code>
+</li>
+<li>structures : <code>{field1:&lt;type1&gt;,field2:&lt;type2&gt;}</code>
+</li>
+<li>arrays : <code>[&lt;type1&gt;]</code>
+</li>
+<li>unions : <code>|&lt;type1&gt;,&lt;type2&gt;|</code>
+</li>
+<li>top type : <code>any</code> = <code>|&lt;firsttype&gt;,&lt;secondtype&gt;,...,&lt;lasttype&gt;|</code>
+</li>
+</ul>
+
+<p>The classical notion of data type encompass two different notions :</p>
+
+<ul>
+<li>Data type of a function declaration (e.g. <code>float sin(float x);</code>) : We call it <strong>channel type</strong> because it is the specification of the type of data that <em>can</em> be received or sent by an interaction. It does not specify the type of any actual data, but it merely gives the shape of the channel the data flows through. Channel types are not specified in most weakly typed languages. They are specified explicitely in III.</li>
+<li>Data type of a variable instantiation (e.g. <code>int x = 2;</code>) : We call it <strong>data type</strong> because it is the specification of the type of the actual data. Data types are often specified as <code>var</code> in weakly typed languages, and redundantly declared in strongly typed language. They are specified implicitely and infered automatically in III.</li>
+</ul>
+
+<p>In III, data types are specified implicitely, through instantiation, while channel types are specified explicitely.</p>
+
+<p>A data type is a simple type expression.</p>
+
+<p>A channel type is a type expression, with additional information about the flow direction using <code>in</code> and <code>out</code> keywordds. Channel type is a type expression tree where the only path going from the root to any leaf crosses one and only one "in" or "out".</p>
+
+<h4>
+<a id="rationale-7" class="anchor" href="#rationale-7" aria-hidden="true"><span class="octicon octicon-link"></span></a>Rationale</h4>
+
+<p>Basically, don't fix the direction of dataflow ! Restrict it to AST edges to enable compositional verification, but allow it to go in both direction at the same time instead of only down (classical languages) or only up or down (iii with simple types)</p>
+
+<hr>
+
+<h2>
+<a id="base-interactions-semantics" class="anchor" href="#base-interactions-semantics" aria-hidden="true"><span class="octicon octicon-link"></span></a>Base Interactions semantics</h2>
+
+<h3>
+<a id="assignment" class="anchor" href="#assignment" aria-hidden="true"><span class="octicon octicon-link"></span></a>Assignment</h3>
+
+<h4>
+<a id="signature" class="anchor" href="#signature" aria-hidden="true"><span class="octicon octicon-link"></span></a>Signature</h4>
+
+<p>void emission ( ( emission a) = ( reception b) )</p>
+
+<h4>
+<a id="example-of-use" class="anchor" href="#example-of-use" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example of use</h4>
+
+<p>( (a) = (b) )</p>
+
+<h4>
+<a id="semantics" class="anchor" href="#semantics" aria-hidden="true"><span class="octicon octicon-link"></span></a>Semantics</h4>
+
+<p>When the assignment (<code>(a)=(b)</code>) is active, the emission (<code>a</code>) on the left is given the value returned by the reception (<code>b</code>) on the right.</p>
+
+<h4>
+<a id="truth-table" class="anchor" href="#truth-table" aria-hidden="true"><span class="octicon octicon-link"></span></a>Truth table</h4>
+
+<table>
+<thead>
+<tr>
+<th align="center"><code>((a)=(b))</code></th>
+<th align="center"><code>(b)</code></th>
+<th align="center"><code>(a)</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><strong>active</strong></td>
+<td align="center"><strong><em>value</em></strong></td>
+<td align="center"><em>value</em></td>
+</tr>
+<tr>
+<td align="center"><strong>active</strong></td>
+<td align="center"><strong>~</strong></td>
+<td align="center">~</td>
+</tr>
+<tr>
+<td align="center"><strong>~</strong></td>
+<td align="center"><strong><em>value</em></strong></td>
+<td align="center">~</td>
+</tr>
+<tr>
+<td align="center"><strong>~</strong></td>
+<td align="center"><strong>~</strong></td>
+<td align="center">~</td>
+</tr>
+</tbody>
+</table>
+
+<h4>
+<a id="example-chronogram" class="anchor" href="#example-chronogram" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example chronogram</h4>
+
+<table>
+<thead>
+<tr>
+<th align="center">Step</th>
+<th align="center"><code>((a)=(b))</code></th>
+<th align="center"><code>(b)</code></th>
+<th align="center"><code>(a)</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="center"><strong>~</strong></td>
+<td align="center"><strong>4</strong></td>
+<td align="center">~</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center"><strong>~</strong></td>
+<td align="center"><strong>5</strong></td>
+<td align="center">~</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center"><strong>active</strong></td>
+<td align="center"><strong>6</strong></td>
+<td align="center">6</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center"><strong>active</strong></td>
+<td align="center"><strong>7</strong></td>
+<td align="center">7</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center"><strong>active</strong></td>
+<td align="center"><strong>~</strong></td>
+<td align="center">~</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center"><strong>~</strong></td>
+<td align="center"><strong>9</strong></td>
+<td align="center">~</td>
+</tr>
+</tbody>
+</table>
+
+<h3>
+<a id="all" class="anchor" href="#all" aria-hidden="true"><span class="octicon octicon-link"></span></a>All</h3>
+
+<h4>
+<a id="signature-1" class="anchor" href="#signature-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Signature</h4>
+
+<p> emission ( all ( emission a) ( emission b) )</p>
+
+<h4>
+<a id="example-of-use-1" class="anchor" href="#example-of-use-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example of use</h4>
+
+<p>( all (a) (b) )</p>
+
+<h4>
+<a id="semantics-1" class="anchor" href="#semantics-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Semantics</h4>
+
+<p>The value given to <code>(all(a)(b))</code> is given to both <code>(a)</code> and <code>(b)</code></p>
+
+<h4>
+<a id="truth-table-1" class="anchor" href="#truth-table-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Truth table</h4>
+
+<table>
+<thead>
+<tr>
+<th align="center"><code>(all(a)(b))</code></th>
+<th align="center"><code>(b)</code></th>
+<th align="center"><code>(a)</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><strong><em>value</em></strong></td>
+<td align="center"><em>value</em></td>
+<td align="center"><em>value</em></td>
+</tr>
+<tr>
+<td align="center"><strong>~</strong></td>
+<td align="center">~</td>
+<td align="center">~</td>
+</tr>
+</tbody>
+</table>
+
+<h4>
+<a id="example-chronogram-1" class="anchor" href="#example-chronogram-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example chronogram</h4>
+
+<table>
+<thead>
+<tr>
+<th align="center">Step</th>
+<th align="center"><code>(all(a)(b))</code></th>
+<th align="center"><code>(a)</code></th>
+<th align="center"><code>(b)</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="center"><strong>~</strong></td>
+<td align="center">~</td>
+<td align="center">~</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center"><strong>~</strong></td>
+<td align="center">~</td>
+<td align="center">~</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center"><strong>6</strong></td>
+<td align="center">6</td>
+<td align="center">6</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center"><strong>7</strong></td>
+<td align="center">7</td>
+<td align="center">7</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center"><strong>~</strong></td>
+<td align="center">~</td>
+<td align="center">~</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center"><strong>8</strong></td>
+<td align="center">8</td>
+<td align="center">8</td>
+</tr>
+</tbody>
+</table>
+
+<h3>
+<a id="either" class="anchor" href="#either" aria-hidden="true"><span class="octicon octicon-link"></span></a>Either</h3>
+
+<h4>
+<a id="signature-2" class="anchor" href="#signature-2" aria-hidden="true"><span class="octicon octicon-link"></span></a>Signature</h4>
+
+<p> emission ( either ( emission a) ( emission b) )</p>
+
+<h4>
+<a id="example-of-use-2" class="anchor" href="#example-of-use-2" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example of use</h4>
+
+<p>( either (a) (b) )</p>
+
+<h4>
+<a id="semantics-2" class="anchor" href="#semantics-2" aria-hidden="true"><span class="octicon octicon-link"></span></a>Semantics</h4>
+
+<p>The value given to <code>(either(a)(b))</code> is given to either <code>(a)</code> or <code>(b)</code></p>
+
+<h4>
+<a id="truth-table-2" class="anchor" href="#truth-table-2" aria-hidden="true"><span class="octicon octicon-link"></span></a>Truth table</h4>
+
+<p>Non deterministically choosen between the two following tables:</p>
+
+<table>
+<thead>
+<tr>
+<th align="center"><code>(either(a)(b))</code></th>
+<th align="center"><code>(b)</code></th>
+<th align="center"><code>(a)</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><strong><em>value</em></strong></td>
+<td align="center"><em>value</em></td>
+<td align="center">~</td>
+</tr>
+<tr>
+<td align="center"><strong>~</strong></td>
+<td align="center">~</td>
+<td align="center">~</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<thead>
+<tr>
+<th align="center"><code>(either(a)(b))</code></th>
+<th align="center"><code>(b)</code></th>
+<th align="center"><code>(a)</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><strong><em>value</em></strong></td>
+<td align="center">~</td>
+<td align="center"><em>value</em></td>
+</tr>
+<tr>
+<td align="center"><strong>~</strong></td>
+<td align="center">~</td>
+<td align="center">~</td>
+</tr>
+</tbody>
+</table>
+
+<h4>
+<a id="example-chronogram-2" class="anchor" href="#example-chronogram-2" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example chronogram</h4>
+
+<table>
+<thead>
+<tr>
+<th align="center">Step</th>
+<th align="center"><code>(either(a)(b))</code></th>
+<th align="center"><code>(a)</code></th>
+<th align="center"><code>(b)</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="center"><strong>~</strong></td>
+<td align="center">~</td>
+<td align="center">~</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center"><strong>5</strong></td>
+<td align="center">5</td>
+<td align="center">~</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center"><strong>6</strong></td>
+<td align="center">~</td>
+<td align="center">6</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center"><strong>7</strong></td>
+<td align="center">~</td>
+<td align="center">7</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center"><strong>~</strong></td>
+<td align="center">~</td>
+<td align="center">~</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center"><strong>8</strong></td>
+<td align="center">8</td>
+<td align="center">~</td>
+</tr>
+</tbody>
+</table>
+
+<h3>
+<a id="when" class="anchor" href="#when" aria-hidden="true"><span class="octicon octicon-link"></span></a>When</h3>
+
+<h4>
+<a id="signature-3" class="anchor" href="#signature-3" aria-hidden="true"><span class="octicon octicon-link"></span></a>Signature</h4>
+
+<p>void emission ( when (void reception a) : (void emission b) )</p>
+
+<h4>
+<a id="example-of-use-3" class="anchor" href="#example-of-use-3" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example of use</h4>
+
+<p>( when (a) : (b) )</p>
+
+<h4>
+<a id="semantics-3" class="anchor" href="#semantics-3" aria-hidden="true"><span class="octicon octicon-link"></span></a>Semantics</h4>
+
+<p>When <code>(when(a):(b))</code> is active and <code>(a)</code> returns the active value then <code>(b)</code> is given the active value. Note how this is similar to the assignment <code>((b)=(a))</code> with <code>void</code> values.</p>
+
+<h4>
+<a id="truth-table-3" class="anchor" href="#truth-table-3" aria-hidden="true"><span class="octicon octicon-link"></span></a>Truth table</h4>
+
+<table>
+<thead>
+<tr>
+<th align="center"><code>(when(a):(b))</code></th>
+<th align="center"><code>(a)</code></th>
+<th align="center"><code>(b)</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><strong>active</strong></td>
+<td align="center"><strong>active</strong></td>
+<td align="center">active</td>
+</tr>
+<tr>
+<td align="center"><strong>active</strong></td>
+<td align="center"><strong>~</strong></td>
+<td align="center">~</td>
+</tr>
+<tr>
+<td align="center"><strong>~</strong></td>
+<td align="center"><strong>active</strong></td>
+<td align="center">~</td>
+</tr>
+<tr>
+<td align="center"><strong>~</strong></td>
+<td align="center"><strong>~</strong></td>
+<td align="center">~</td>
+</tr>
+</tbody>
+</table>
+
+<h4>
+<a id="example-chronogram-3" class="anchor" href="#example-chronogram-3" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example chronogram</h4>
+
+<table>
+<thead>
+<tr>
+<th align="center">Step</th>
+<th align="center"><code>(when(a):(b))</code></th>
+<th align="center"><code>(a)</code></th>
+<th align="center"><code>(b)</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="center"><strong>~</strong></td>
+<td align="center"><strong>active</strong></td>
+<td align="center">~</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center"><strong>~</strong></td>
+<td align="center"><strong>active</strong></td>
+<td align="center">~</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center"><strong>active</strong></td>
+<td align="center"><strong>active</strong></td>
+<td align="center">active</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center"><strong>active</strong></td>
+<td align="center"><strong>active</strong></td>
+<td align="center">active</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center"><strong>active</strong></td>
+<td align="center"><strong>~</strong></td>
+<td align="center">~</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center"><strong>~</strong></td>
+<td align="center"><strong>active</strong></td>
+<td align="center">~</td>
+</tr>
+</tbody>
+</table>
+
+<h3>
+<a id="always" class="anchor" href="#always" aria-hidden="true"><span class="octicon octicon-link"></span></a>Always</h3>
+
+<h4>
+<a id="signature-4" class="anchor" href="#signature-4" aria-hidden="true"><span class="octicon octicon-link"></span></a>Signature</h4>
+
+<p>void emission ( always : (void emission b) )</p>
+
+<h4>
+<a id="example-of-use-4" class="anchor" href="#example-of-use-4" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example of use</h4>
+
+<p>( always : (a) )</p>
+
+<h4>
+<a id="semantics-4" class="anchor" href="#semantics-4" aria-hidden="true"><span class="octicon octicon-link"></span></a>Semantics</h4>
+
+<p><code>(always:(a))</code> forces <code>(a)</code> to be active, even when <code>(always:(a))</code> is given the inactive value <code>~</code>.</p>
+
+<h4>
+<a id="truth-table-4" class="anchor" href="#truth-table-4" aria-hidden="true"><span class="octicon octicon-link"></span></a>Truth table</h4>
+
+<table>
+<thead>
+<tr>
+<th align="center"><code>(always:(a))</code></th>
+<th align="center"><code>(a)</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><strong>active</strong></td>
+<td align="center">active</td>
+</tr>
+<tr>
+<td align="center"><strong>~</strong></td>
+<td align="center">active</td>
+</tr>
+</tbody>
+</table>
+
+<h4>
+<a id="example-chronogram-4" class="anchor" href="#example-chronogram-4" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example chronogram</h4>
+
+<table>
+<thead>
+<tr>
+<th align="center">Step</th>
+<th align="center"><code>(always(a))</code></th>
+<th align="center"><code>(a)</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="center"><strong>~</strong></td>
+<td align="center">active</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center"><strong>~</strong></td>
+<td align="center">active</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center"><strong>active</strong></td>
+<td align="center">active</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center"><strong>active</strong></td>
+<td align="center">active</td>
+</tr>
+</tbody>
+</table>
+
+<h3>
+<a id="active" class="anchor" href="#active" aria-hidden="true"><span class="octicon octicon-link"></span></a>Active</h3>
+
+<h4>
+<a id="signature-5" class="anchor" href="#signature-5" aria-hidden="true"><span class="octicon octicon-link"></span></a>Signature</h4>
+
+<p>boolean reception ( active (  reception a ) )</p>
+
+<h4>
+<a id="example-of-use-5" class="anchor" href="#example-of-use-5" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example of use</h4>
+
+<p>( active (a) )</p>
+
+<h4>
+<a id="semantics-5" class="anchor" href="#semantics-5" aria-hidden="true"><span class="octicon octicon-link"></span></a>Semantics</h4>
+
+<p>When <code>(a)</code> is active, <code>(active(a))</code> returns <code>true</code>, and when <code>(a)</code> is not active, <code>(active(a))</code> returns <code>false</code>. <code>(active(a))</code> itself is always active, even when <code>(a)</code> is not.</p>
+
+<h4>
+<a id="truth-table-5" class="anchor" href="#truth-table-5" aria-hidden="true"><span class="octicon octicon-link"></span></a>Truth table</h4>
+
+<table>
+<thead>
+<tr>
+<th align="center"><code>(a)</code></th>
+<th align="center"><code>(active(a))</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><strong><em>value</em></strong></td>
+<td align="center">true</td>
+</tr>
+<tr>
+<td align="center"><strong>~</strong></td>
+<td align="center">false</td>
+</tr>
+</tbody>
+</table>
+
+<h4>
+<a id="example-chronogram-5" class="anchor" href="#example-chronogram-5" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example chronogram</h4>
+
+<table>
+<thead>
+<tr>
+<th align="center">Step</th>
+<th align="center"><code>(a)</code></th>
+<th align="center"><code>(active(a))</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="center"><strong>~</strong></td>
+<td align="center">false</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center"><strong>3</strong></td>
+<td align="center">true</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center"><strong>4</strong></td>
+<td align="center">true</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center"><strong>~</strong></td>
+<td align="center">false</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center"><strong>5</strong></td>
+<td align="center">true</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center"><strong>~</strong></td>
+<td align="center">false</td>
+</tr>
+</tbody>
+</table>
+
+<h3>
+<a id="previous" class="anchor" href="#previous" aria-hidden="true"><span class="octicon octicon-link"></span></a>Previous</h3>
+
+<h4>
+<a id="signature-6" class="anchor" href="#signature-6" aria-hidden="true"><span class="octicon octicon-link"></span></a>Signature</h4>
+
+<p> reception ( previous (  reception a ) )</p>
+
+<h4>
+<a id="example-of-use-6" class="anchor" href="#example-of-use-6" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example of use</h4>
+
+<p>( previous (a) )</p>
+
+<h4>
+<a id="semantics-6" class="anchor" href="#semantics-6" aria-hidden="true"><span class="octicon octicon-link"></span></a>Semantics</h4>
+
+<p>Go back in time by one step. <code>(previous(a))</code> returns what  <code>(a)</code> returned on the previous execution step.</p>
+
+<h4>
+<a id="example-chronogram-6" class="anchor" href="#example-chronogram-6" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example chronogram</h4>
+
+<table>
+<thead>
+<tr>
+<th align="center">Step</th>
+<th align="center"><code>(a)</code></th>
+<th align="center"><code>(previous(a))</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="center"><strong>~</strong></td>
+<td align="center">~</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center"><strong>5</strong></td>
+<td align="center">~</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center"><strong>6</strong></td>
+<td align="center">5</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center"><strong>~</strong></td>
+<td align="center">6</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center"><strong>8</strong></td>
+<td align="center">~</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center"><strong>~</strong></td>
+<td align="center">8</td>
+</tr>
+</tbody>
+</table>
+
+<h3>
+<a id="init" class="anchor" href="#init" aria-hidden="true"><span class="octicon octicon-link"></span></a>Init</h3>
+
+<h4>
+<a id="signature-7" class="anchor" href="#signature-7" aria-hidden="true"><span class="octicon octicon-link"></span></a>Signature</h4>
+
+<p>void reception ( init )</p>
+
+<h4>
+<a id="example-of-use-7" class="anchor" href="#example-of-use-7" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example of use</h4>
+
+<p>( init )</p>
+
+<h4>
+<a id="semantics-7" class="anchor" href="#semantics-7" aria-hidden="true"><span class="octicon octicon-link"></span></a>Semantics</h4>
+
+<p>Active only on the first step, inactive the rest of the time.</p>
+
+<h4>
+<a id="example-chronogram-7" class="anchor" href="#example-chronogram-7" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example chronogram</h4>
+
+<table>
+<thead>
+<tr>
+<th align="center">Step</th>
+<th align="center"><code>(init)</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="center">active</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center">~</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">~</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">~</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center">~</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center">~</td>
+</tr>
+</tbody>
+</table>
+
+<h3>
+<a id="default" class="anchor" href="#default" aria-hidden="true"><span class="octicon octicon-link"></span></a>Default</h3>
+
+<h4>
+<a id="signature-8" class="anchor" href="#signature-8" aria-hidden="true"><span class="octicon octicon-link"></span></a>Signature</h4>
+
+<p> reception ( (  reception a ) default (  reception b ) )</p>
+
+<h4>
+<a id="example-of-use-8" class="anchor" href="#example-of-use-8" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example of use</h4>
+
+<p>( (a) default (b) )</p>
+
+<h4>
+<a id="semantics-8" class="anchor" href="#semantics-8" aria-hidden="true"><span class="octicon octicon-link"></span></a>Semantics</h4>
+
+<p>If <code>(a)</code> is active, <code>((a)default(b))</code> returns <code>(a)</code>, else it returns <code>(b)</code>.</p>
+
+<h4>
+<a id="truth-table-6" class="anchor" href="#truth-table-6" aria-hidden="true"><span class="octicon octicon-link"></span></a>Truth table</h4>
+
+<table>
+<thead>
+<tr>
+<th align="center"><code>(a)</code></th>
+<th align="center"><code>(b)</code></th>
+<th align="center"><code>((a)default(b))</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><strong><em>value a</em></strong></td>
+<td align="center"><strong><em>value b</em></strong></td>
+<td align="center"><em>value a</em></td>
+</tr>
+<tr>
+<td align="center"><strong><em>value a</em></strong></td>
+<td align="center"><strong>~</strong></td>
+<td align="center"><em>value a</em></td>
+</tr>
+<tr>
+<td align="center"><strong>~</strong></td>
+<td align="center"><strong><em>value b</em></strong></td>
+<td align="center"><em>value b</em></td>
+</tr>
+<tr>
+<td align="center"><strong>~</strong></td>
+<td align="center"><strong>~</strong></td>
+<td align="center">~</td>
+</tr>
+</tbody>
+</table>
+
+<h4>
+<a id="example-chronogram-8" class="anchor" href="#example-chronogram-8" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example chronogram</h4>
+
+<table>
+<thead>
+<tr>
+<th align="center">Step</th>
+<th align="center"><code>(a)</code></th>
+<th align="center"><code>(b)</code></th>
+<th align="center"><code>((a)default(b))</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="center"><strong>~</strong></td>
+<td align="center"><strong>0</strong></td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center"><strong>~</strong></td>
+<td align="center"><strong>~</strong></td>
+<td align="center">~</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center"><strong>3</strong></td>
+<td align="center"><strong>~</strong></td>
+<td align="center">3</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center"><strong>4</strong></td>
+<td align="center"><strong>5</strong></td>
+<td align="center">4</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center"><strong>~</strong></td>
+<td align="center"><strong>2</strong></td>
+<td align="center">2</td>
+</tr>
+</tbody>
+</table>
+
+<h3>
+<a id="flow" class="anchor" href="#flow" aria-hidden="true"><span class="octicon octicon-link"></span></a>Flow</h3>
+
+<h4>
+<a id="signature-9" class="anchor" href="#signature-9" aria-hidden="true"><span class="octicon octicon-link"></span></a>Signature</h4>
+
+<p>void emission ( flow (  interaction a ) change (  reception b ) )</p>
+
+<h4>
+<a id="example-of-use-9" class="anchor" href="#example-of-use-9" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example of use</h4>
+
+<p>( flow (a) change (b) )</p>
+
+<h4>
+<a id="semantics-9" class="anchor" href="#semantics-9" aria-hidden="true"><span class="octicon octicon-link"></span></a>Semantics</h4>
+
+<p>Flow <code>(a)</code> from time step to time step, but give it value <code>(b)</code> when <code>(b)</code> is active.</p>
+
+<h4>
+<a id="equivalent-to" class="anchor" href="#equivalent-to" aria-hidden="true"><span class="octicon octicon-link"></span></a>Equivalent to</h4>
+
+<p>(  (a) = ( (b) default (previous(a)) ) )</p>
+
+<h4>
+<a id="example-chronogram-9" class="anchor" href="#example-chronogram-9" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example chronogram</h4>
+
+<table>
+<thead>
+<tr>
+<th align="center">Step</th>
+<th align="center"><code>(flow(a)change(b))</code></th>
+<th align="center"><code>(b)</code></th>
+<th align="center"><code>(a)</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="center"><strong>~</strong></td>
+<td align="center"><strong>~</strong></td>
+<td align="center">~</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center"><strong>active</strong></td>
+<td align="center"><strong>5</strong></td>
+<td align="center">5</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center"><strong>active</strong></td>
+<td align="center"><strong>~</strong></td>
+<td align="center">5</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center"><strong>active</strong></td>
+<td align="center"><strong>~</strong></td>
+<td align="center">5</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center"><strong>active</strong></td>
+<td align="center"><strong>3</strong></td>
+<td align="center">3</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center"><strong>active</strong></td>
+<td align="center"><strong>~</strong></td>
+<td align="center">3</td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td align="center"><strong>active</strong></td>
+<td align="center"><strong>~</strong></td>
+<td align="center">3</td>
+</tr>
+<tr>
+<td align="center">7</td>
+<td align="center"><strong>~</strong></td>
+<td align="center"><strong>~</strong></td>
+<td align="center">~</td>
+</tr>
+</tbody>
+</table>
+
+<h2>
+<a id="advanced-interactions-semantics" class="anchor" href="#advanced-interactions-semantics" aria-hidden="true"><span class="octicon octicon-link"></span></a>Advanced Interactions semantics</h2>
+
+<h3>
+<a id="apply" class="anchor" href="#apply" aria-hidden="true"><span class="octicon octicon-link"></span></a>Apply</h3>
+
+<p>Signature</p>
+
+<p> reception ( apply ( [ →  ] reception func ) on (  reception data ) )</p>
+
+<p>Example of use</p>
+
+<p>( apply (func) on (a) )</p>
+
+<p>Semantic</p>
+
+<p>Returns the result of the application of a function <code>(func)</code> to data <code>(a)</code></p>
+
+<p>Associated chronogram</p>
+
+<table>
+<thead>
+<tr>
+<th align="center">Step</th>
+<th align="center"><code>(func)</code></th>
+<th align="center"><code>(data)</code></th>
+<th align="center"><code>(apply(func)on(a))</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="center"><strong>~</strong></td>
+<td align="center"><strong>0</strong></td>
+<td align="center">~</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center"><strong>sin</strong></td>
+<td align="center"><strong>0</strong></td>
+<td align="center">0.</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center"><strong>sin</strong></td>
+<td align="center"><strong>2</strong></td>
+<td align="center">0.909</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center"><strong>sin</strong></td>
+<td align="center"><strong>~</strong></td>
+<td align="center">~</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center"><strong>~</strong></td>
+<td align="center"><strong>3</strong></td>
+<td align="center">~</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center"><strong>cos</strong></td>
+<td align="center"><strong>4</strong></td>
+<td align="center">-0.653</td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td align="center"><strong>cos</strong></td>
+<td align="center"><strong>5</strong></td>
+<td align="center">0.283</td>
+</tr>
+<tr>
+<td align="center">7</td>
+<td align="center"><strong>~</strong></td>
+<td align="center"><strong>6</strong></td>
+<td align="center">~</td>
+</tr>
+</tbody>
+</table>
+
+<hr>
+
+<h2>
+<a id="example" class="anchor" href="#example" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example</h2>
+
+<p>The speed controller application :</p>
+
+<p>(speedcontroller (alarm:boolean out) (displayedspeed:number out) (targetspeed: number out) (actualspeed:number in) (increment: activation in) (decrement: activation out) ):
+activation in :
+(all
+  ((displayedspeed) = (actualspeed)),
+  ((alarm)=((actualspeed)&gt;(targetspeed))),
+  ((targetspeed)=(incdec behavior(increment)(decrement)(actualspeed)(5)(30)(150)))
+  )
+  )</p>
+
+<p>Increment Decrement behaviour :</p>
+
+<p>(incdec behavior (inc: activation in) (dec:activation in) (actual:number in) (step:number in) (min:number in) (max:number in) ):
+  number out:
+  (restrict
+    (
+      (previous(this))
+      + (step) * (1 if (inc) is active)
+      - (step) * (1 if (dec) is active)
+      )
+      to range (min) (max)
+      )</p>
+
+<pre><code>  Just a small utility function :
+
+  (1 if (theSignal:&lt;type&gt; in) is active):
+  number out :
+  (if (active(a)) then (1) else (0))
+
+
+  Ensure a value is in a range  :
+
+  (restrict (value:number in) to range (min:number in) (max:number in)):
+  number out:
+  ( if ((value)&gt;(max))
+  then (max)
+  else ( if ((value)&lt;(min))
+  then (min)
+  else (value)
+  )
+  )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  &lt;!--
+
+
+
+
+
+  ## Examples
+
+  This piece of III code will be the running example of this document. It is an implementation of the TodoMVC example used to benchmark UI frameworks at [todomvc.com](todomvc.com).
+
+  Prerequisites:
+
+  html data: htmlelement
+
+  htmlelement data:
+  {name:text,attributes:[htmlattribute],content:[htmlelement]}
+
+  htmlattribute data:
+  {name:text,value:text}
+
+  htmlevent data:
+  {source:text,event:text,value:text}
+
+  htmlelement reception (&lt;(text reception name)([htmlattribute] reception attr)&gt;()&lt;/&gt;)
+
+  html reception (buttonDown) : "image of a button down"
+  html reception (buttonUp) : "image of a button up"
+
+  void emission (toggle button (html emission scene) (boolean data model) (void reception click)) :
+  (
+  (when(click):((model)=(not(previous(model)))));
+  (always:((scene)=(if(model)then(buttonDown)else(buttonUp))))
+  )
+
+  void emission (simple button (html emission scene) (void reception click)) :
+  (
+  (when(click):((scene)=(buttonDown)))
+  (when(no(click))):((scene)=(buttonUp)))
+  )
+
+  Code:
+
+  mode data:
+  enum(all,active,completed)
+
+  todo data:
+  {name:text,completed:boolean}
+
+  void emission (todoItem
+  (todo data model)
+  (html emission scene)
+  (void reception changeCompletion)
+  (text reception changeName)
+  (void reception remove)
+  ) :
+
+  (
+  (simple button (removeButton) (clickRemoveButton))
+  (toggle button (completedButton) (model.completed))
+
+  (scene=(&lt;(div) ()&gt; () &lt;/&gt;));
+  (when(changeCompletion):(negate ((theModel).completed)))
+  (when(remove):(negate ((theModel).completed)))
+
+  )
+
+  html reception (todoApp
+  ([todo...] interaction model)
+  ):
+
+
+
+  void emission (main (html emission scene) (event reception event)) :
+
+
+  (
+  ((scene) = (todoApp));
+  )
+
+
+
+
+  Ok test :
+
+
+  // Signature are :&lt;argument type&gt;:&lt;this type&gt;:&lt;local type&gt;:
+  // Syntax interactionName:&lt;argument type&gt;:&lt;this type&gt;:&lt;local type&gt;:behavior
+
+
+  //WIMP component : signature is :&lt;argtype&gt;:{scene:out scene,event:in event}:&lt;localtype&gt;:
+
+  incrementDecrement:
+  {step:in number,range:in range}: // argument
+  {scene:out scene, event:in event, value:out number}: //this
+  {inc: event, incbutton:buton,decbutton:button }: //local
+  all [
+  flow  {variable:this.value,
+  switch: this.value + step * 1IfActive this.event.increment - step * 1IfActive this.event.increment)
+  },
+  affect (this.scene,
+  {name:div,content[incbutton.scene,incbutton.scene]}
+  )
+  ];
+
+
+
+
+  button:
+  {}:
+  {scene:out scene, event:in event,clicked:out void}:
+  {}:
+  all [
+  this.scene = [rectangle(...),text(...)];
+  this.clicked = if {condition:this.event.type=="click",then:active,else:inactive};
+  ]
+
+
+
+  // Util
+
+  1IfActive:
+  in &lt;type1&gt;:
+
+  out number:
+  {}:
+  when {active:argument,then:affect(this,1),else:affect(this,0)}
+
+
+
+  //Behaviors : signature is  :&lt;argtype&gt;:in activation:&lt;localtype&gt;:
+
+  flow:
+  {variable:out &lt;type&gt;,switch:in &lt;type&gt;}:
+  in activation:
+  {}:
+  when {active:this,
+  then:when{ active:switch,
+  then:affect(argument.flow,argument.switch),
+  else:affect(argument.flow,previous argument.flow)
+  },
+  else:affect(argument.flow,inactive)
+};
+
+
+all:
+[out activation]: //argument
+in activation: //this
+{}: //local
+native
+
+when:
+{active:in activation, then:out activation:toVoid,dont:out activation:toVoid}:
+in activation:
+void:
+native
+
+toVoid:void:in activation:void:;
+
+
+
+
+incrementDecrement (
+button("increment"),
+button("decrement")
+)
+
+
+
+
+
+
+todoListWimp:
+[in todo]:
+{scene:out scene,event:in event}:
+{}:
+
+local.content=map(argument,);
+
+
+
+in activation (todoWIMP (in todo)):
+{buttonCompleted: toggleButton,nameLabel: label,buttonDelete: button}:
+{}:
+
+{}
+
+this.scene=div({},[
+local.buttonCompleted.scene,
+local.nameLabel.scene,
+local.buttonDelete.scene
+])
+
+
+
+
+
+TodoMVC
+
+todo Data :
+{key:uuid,name:text,completed:boolean}
+
+event Data :
+|
+addTodo {name:text},
+updateTodo {key:text,name:text}
+completeTodo {key:uuid},
+completeAll,
+removeTodo {key:uuid}
+removeComplete {}
+|
+
+
+(todoApp) :
+
+
+{html:html out, action:action out, even:event in, todoList:todoList in} (todoListDisplay) :
+[todoDisplay] : (map (argument.todoList)          )
+{html : }
+
+
+(todoDisplay) :
+{html:html out, action:action out, even:event in, todo:todo in} : --&gt;
+
+
+## Project setup
+
+install with `npm install`
+
+make with `gulp`
+
+Locations:
+- sources in `src/`
+- tests using mocha in `test/`
+- precompiled external libraries in `lib`
+- compiled artifacts in `bin`
+- browserified stuff in `dist`
+</code></pre>
+</li>
+</ul>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">III maintained by <a href="https://github.com/crubier">crubier</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
