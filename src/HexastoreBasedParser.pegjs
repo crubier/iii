@@ -1,5 +1,5 @@
 {
-  var Hexastore = require('Hexastore');
+  var Hexastore = require('hexastore');
 
   var store = new Hexastore();
 

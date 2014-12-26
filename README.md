@@ -1,3 +1,8 @@
+
+[![Build Status](https://travis-ci.org/crubier/iii.svg)](https://travis-ci.org/crubier/iii)
+[![Code Climate](https://codeclimate.com/github/crubier/iii/badges/gpa.svg)](https://codeclimate.com/github/crubier/iii)
+[![Test Coverage](https://codeclimate.com/github/crubier/iii/badges/coverage.svg)](https://codeclimate.com/github/crubier/iii)
+
 # III.js
 
 A simple language to describe interactive systems.

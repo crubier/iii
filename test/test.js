@@ -67,7 +67,7 @@ describe('Parser',function(){
 
 
   });
-})
+});
 
 
 describe('Compiler',function(){
@@ -78,7 +78,7 @@ describe('Compiler',function(){
       });
     });
   });
-})
+});
 
 describe('Hexastore based parser',function(){
   describe('compile',function(){
@@ -92,4 +92,4 @@ describe('Hexastore based parser',function(){
       assert.deepEqual([ { s: 'iii', p: 'by', o: 'crubier' } ],store.search([[['s'],['p'],['o']]]));
     });
   });
-})
+});
