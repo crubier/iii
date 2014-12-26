@@ -2,12 +2,25 @@
   "name": "iii",
   "version": "0.0.1",
   "description": "The interactive interacting interactors framework",
-  "main": "index.js",
-  "directories": {
-    "test": "test"
+  "main": "lib/index.js",
+  "bin": {
+    "iii": "lib/cli.js"
   },
+  "directories": {
+    "test": "test",
+    "lib": "lib",
+    "example":"example"
+  },
+  "files": [
+    "CHANGELOG.md",
+    "README.md",
+    "package.json",
+    "lib/",
+    "example/"
+  ],
   "scripts": {
-    "test": "mocha"
+    "test": "gulp test",
+    "prepublish": "gulp"
   },
   "repository": {
     "type": "git",
@@ -19,12 +32,33 @@
     "interactive",
     "interactor",
     "ui",
-    "dsl"
+    "dsl",
+    "domain specific language"
   ],
-  "author": "Vincent Lecrubier <vincent.lecrubier@gmail.com> (http://www.vincentlecrubier.fr/)",
-  "license": "ISC",
+  "author": {
+    "name": "Vincent Lecrubier",
+    "email": "vincent.lecrubier@gmail.com",
+    "url": "http://www.vincentlecrubier.fr/"
+  },
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/crubier/iii/issues"
   },
-  "homepage": "https://github.com/crubier/iii"
+  "homepage": "https://github.com/crubier/iii",
+  "dependencies": {
+    "async": "^0.9.0",
+    "chalk": "^0.5.1",
+    "hexastore": "^0.1.2",
+    "minimist": "^1.1.0"
+  },
+  "devDependencies": {
+    "del": "^1.1.1",
+    "gulp": "^3.8.10",
+    "gulp-merge": "^0.1.0",
+    "gulp-mocha": "^2.0.0",
+    "gulp-newer": "^0.5.0",
+    "gulp-peg": "^0.1.2",
+    "mocha": "^2.1.0",
+    "pegjs": "^0.8.0"
+  }
 }
