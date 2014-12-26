@@ -1,0 +1,30 @@
+{
+  "name": "iii",
+  "version": "0.0.1",
+  "description": "The interactive interacting interactors framework",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/crubier/iii.git"
+  },
+  "keywords": [
+    "iii",
+    "interaction",
+    "interactive",
+    "interactor",
+    "ui",
+    "dsl"
+  ],
+  "author": "Vincent Lecrubier <vincent.lecrubier@gmail.com> (http://www.vincentlecrubier.fr/)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/crubier/iii/issues"
+  },
+  "homepage": "https://github.com/crubier/iii"
+}
