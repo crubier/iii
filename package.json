@@ -9,7 +9,7 @@
   "directories": {
     "test": "test",
     "lib": "lib",
-    "example":"example"
+    "example": "example"
   },
   "files": [
     "CHANGELOG.md",
@@ -54,11 +54,13 @@
   "devDependencies": {
     "del": "^1.1.1",
     "gulp": "^3.8.10",
+    "gulp-coverage": "^0.3.32",
     "gulp-merge": "^0.1.0",
     "gulp-mocha": "^2.0.0",
     "gulp-newer": "^0.5.0",
     "gulp-peg": "^0.1.2",
     "mocha": "^2.1.0",
+    "mocha-lcov-reporter": "0.0.1",
     "pegjs": "^0.8.0"
   }
 }

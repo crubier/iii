@@ -4,6 +4,8 @@ var mocha = require('gulp-mocha');
 var newer = require('gulp-newer');
 var merge = require('gulp-merge');
 var del   = require('del');
+var cover = require('gulp-coverage');
+
 
 var watching = false;
 function onError(err) {
@@ -32,8 +34,14 @@ gulp.task('lib',function() {
 });
 
 gulp.task ('test',['lib'],function() {
-  return gulp.src('test/**/*.js')
+  return gulp.src('test/test.js', { read: false })
+  .pipe(cover.instrument({
+    pattern: ['lib/*.js']
+  }))
   .pipe(mocha({reporter:'min'}))
+  .pipe(cover.report({
+    outFile: 'coverage.html'
+  }))
   .on("error",onError);
 });
 

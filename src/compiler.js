@@ -9,7 +9,6 @@ var Compiler = function() {
 
 };
 
-
 // Compile a string containing valid III code into a string containing JS Executable code.
 Compiler.prototype.iii2js = function(iiistring) {
 

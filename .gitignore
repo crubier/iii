@@ -161,3 +161,8 @@ $RECYCLE.BIN/
 *.i*86
 *.x86_64
 *.hex
+
+
+# gulp-coverage
+.coverrun
+.coverdata

@@ -1,11 +1,10 @@
 
 [![Travis](https://img.shields.io/travis/crubier/iii.svg?style=flat-square)]()
-[![Coveralls](https://img.shields.io/coveralls/crubier/iii.svg?style=flat-square)]()
 [![Gemnasium](https://img.shields.io/gemnasium/crubier/iii.svg?style=flat-square)]()
 [![npm](https://img.shields.io/npm/v/iii.svg?style=flat-square)]()
 [![npm](https://img.shields.io/npm/dm/iii.svg?style=flat-square)]()
 [![Code Climate](https://img.shields.io/codeclimate/github/crubier/iii.svg?style=flat-square)]()
-[![Code Climate](https://img.shields.io/codeclimate/coverage/github/crubier/iii.svg?style=flat-square)]()
+
 
 # III.js
 
