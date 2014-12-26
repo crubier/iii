@@ -14,7 +14,6 @@ var testExpression = fs.readFileSync('example/example1.iii',{encoding:'utf8'});
 
 describe('Parser',function(){
 
-
   var parsed;
 
     describe('parsing',function(){

@@ -2,6 +2,8 @@
 
 A simple language to describe interactive systems.
 
+http://crubier.github.io/iii
+
 Programming languages are nice for **computations**. However, describing interactions with programming languages is **painful**. We need a language for **interactions**. That is what III is for.
 
 Forget about programming, just describe interactions and let III do the rest.
