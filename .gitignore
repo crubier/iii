@@ -166,3 +166,6 @@ $RECYCLE.BIN/
 # gulp-coverage
 .coverrun
 .coverdata
+
+# Texpad temp directory
+.texpadtmp/
