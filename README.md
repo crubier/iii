@@ -9,6 +9,9 @@
 
 # III.js
 
+
+
+
 A simple language to describe interactive systems.
 
 http://crubier.github.io/iii
@@ -60,7 +63,9 @@ But, you ask, how do we know which operator an expression refers to? Well, this 
 
 To make a parallel with a more classical way to represent expressions, the above expression would usually be represented as :
 
+```
 when$do$(anEvent,$and$(this,that))
+```
 
 #### Rationale
 
@@ -72,13 +77,13 @@ There is only one syntax for all: All these *prefix* operators like `!a`, *infix
 
 Finally, this syntax takes the current evolution of programming languages to its logical conclusion. For example, it generalizes the notion of *Named function parameters* as used in Apple's *Swift Programming Language*, and in Microsoft's *C#*. Javascript developpers also use *argument maps* instead of *positional arguments*. Here is a table comparing different programming languages:
 
-| Language | Expression |
-|----------|------------|
-| C, Java | `CalculateBMI(83,185)` |
-| Javascript | `CalculateBMI({weight:83,height:185})` |
-| C#, Swift | `CalculateBMI(weigth:83,height:185)` |
-| III (Simple) | `(BMI (83)kg (185)cm)` |
-| III (Verbose)  | `(Body Mass Index of someone who weights (83) kg and is (185) cm high)` |
+| Language      | Expression                                                              |
+|:--------------|:------------------------------------------------------------------------|
+| C, Java       | `CalculateBMI(83,185)`                                                  |
+| Javascript    | `CalculateBMI({weight:83,height:185})`                                  |
+| C#, Swift     | `CalculateBMI(weigth:83,height:185)`                                    |
+| III (Simple)  | `(BMI (83)kg (185)cm)`                                                  |
+| III (Verbose) | `(Body Mass Index of someone who weights (83) kg and is (185) cm high)` |
 
 Note how III's syntax allows expressions to be much clearer on their semantics. For example, expected units of parameters are only expressed in III.
 
@@ -91,11 +96,11 @@ III systems are synchronous. This means that interactions are evaluated at discr
 Will be evaluated at discrete points in time, called steps. Every expression of this composed expression will be evaluated at every step. For instance, here is a simplified execution, which does **not** actually comply to the actual semantics of the language:
 
 | Step | anEvent | output |
-|:--:|:--:|:--:|
-|0| `no` | `~` |
-|1| `yes` | `5` |
-|2| `no` | `~` |
-|3| `yes` | `5` |
+|:----:|:-------:|:------:|
+|  0   |  `no`   |  `~`   |
+|  1   |  `yes`  |  `5`   |
+|  2   |  `no`   |  `~`   |
+|  3   |  `yes`  |  `5`   |
 
 #### Rationale
 
@@ -117,16 +122,16 @@ An interaction's _activation_ represents the fact that the interaction exists an
 If an interaction activation is false, we write its value as **~**. Here is a table showing a few examples:
 
 
-| Couple  | Notation  |
-|---|---|
-| _< true, 0 >_ | 0 |
-| _< true, 1 >_ | 1 |
-| _< true, true >_ | true |
-| _< true, "text" >_ | "text" |
-| _< false, 0 >_ | ~ |
-| _< false, 3 >_ | ~ |
-| _< false, "text" >_ | ~ |
-| _< false, true >_ | ~ |
+| Couple                           | Notation |
+|:---------------------------------|:---------|
+| $ \langle \top, 0 \rangle$       | `0`      |
+| $ \langle \top, 1 \rangle $      | `1`      |
+| $ \langle \top, \top \rangle $   | `true`   |
+| $ \langle \top, "text" \rangle $ | `"text"` |
+| $ \langle \bot, 0 \rangle $      | `~`      |
+| $ \langle \bot, 3 \rangle $      | `~`      |
+| $ \langle \bot, "text" \rangle $ | `~`      |
+| $ \langle \bot, \top \rangle $   | `~`      |
 
 
 #### Rationale
@@ -151,25 +156,25 @@ As a first example, look at the following interaction:
 
 In this interaction, `anEvent` is a `reception`, while `theOutput` is an `emission`. But that is not all ! Remember, everything is an interaction ! Here is the complete table of interactions of this example:
 
-| Interaction | Type | Kind | Operator |
-|:--:|:--:|:--:|:--:|
-|    `(anEvent)`  | `void` |   `reception`  | `anEvent` |
-|    `(5)`  | `number` | `reception`  | `5` |
-|    `(theOutput)` | `number`|   `emission`  | `theOutput` |
-|    `((theOutput) = (5))` | `void`|   `emission`  | `$=$` |
-| `( when (anEvent) : ( (theOutput) = (5) ) )`|`void`|`emission`| `when$:$` |
+|                 Interaction                  |   Type   |    Kind     |  Operator   |
+|:--------------------------------------------:|:--------:|:-----------:|:-----------:|
+|                 `(anEvent)`                  |  `void`  | `reception` |  `anEvent`  |
+|                    `(5)`                     | `number` | `reception` |     `5`     |
+|                `(theOutput)`                 | `number` | `emission`  | `theOutput` |
+|            `((theOutput) = (5))`             |  `void`  | `emission`  |    `$=$`    |
+| `( when (anEvent) : ( (theOutput) = (5) ) )` |  `void`  | `emission`  |  `when$:$`  |
 
 #### Rationale
 
 Again, this language feature is taking evolutions of languages to its natural conclusion.
 Here is a table presenting the evolution of how different programming languages treat assignments:
 
-| Language | Expression | Remark |
-|:--:|:--:|:--:|
-| Assembly | `cpy res, a; add res, b;` | Expressions cannot be nested at all|
-| C, Java | `res = a + ( b * c );` | Arbitrary expressions on the right hand side of assignment, only variable names on the left hand side|
-| JS ES6 | `{ x, y } = f(a,(b+c));` | Arbitrary expressions on the right hand side of assignment, restricted subset of expressions on the left hand side|
-| III | `( ( (x) or (y) ) = ( (a) + (b) ) )` | Arbitrary expressions on both sides of the assignment|
+| Language |              Expression              |                                                       Remark                                                       |
+|:--------:|:------------------------------------:|:------------------------------------------------------------------------------------------------------------------:|
+| Assembly |      `cpy res, a; add res, b;`       |                                        Expressions cannot be nested at all                                         |
+| C, Java  |        `res = a + ( b * c );`        |       Arbitrary expressions on the right hand side of assignment, only variable names on the left hand side        |
+|  JS ES6  |       `{ x, y } = f(a,(b+c));`       | Arbitrary expressions on the right hand side of assignment, restricted subset of expressions on the left hand side |
+|   III    | `( ( (x) or (y) ) = ( (a) + (b) ) )` |                               Arbitrary expressions on both sides of the assignment                                |
 
 This shows that the *emission* / *reception* paradigm is a generalisation of current evolutions of programming languages, such as the destructuring assignment.
 
@@ -177,12 +182,12 @@ This shows that the *emission* / *reception* paradigm is a generalisation of cur
 
 There are few different base types:
 
-| Type | Description | Example literals |
-| --- | -- | -- |
-| `void` | Bottom type, carries no data except activation information | `active`, `~` |
-| `boolean` | When active it can be either true or false   | `true`,`false`, `~` |
-| `number` | Can be an integer or a float  | `0`,`1.`,`13.37`,`-42`, `~` |
-| `text` | Any sequence of unicode characters  | `"foo"`, `"this is a text"`, `~` |
+| Type      | Description                                                | Example literals                 |
+|:----------|:-----------------------------------------------------------|:---------------------------------|
+| `void`    | Bottom type, carries no data except activation information | `active`, `~`                    |
+| `boolean` | When active it can be either true or false                 | `true`,`false`, `~`              |
+| `number`  | Can be an integer or a float                               | `0`,`1.`,`13.37`,`-42`, `~`      |
+| `text`    | Any sequence of unicode characters                         | `"foo"`, `"this is a text"`, `~` |
 
 #### Rationale
 
@@ -192,19 +197,19 @@ Do we need more ? The user can always define custom enumerated types, so we shou
 
 There are different constructions for complex types:
 
-| Type | Description | Example type |
-| --- | -- | -- |
-| `[ <type1>, <type2> ]` | Tuples are combinations of a fixed number of different types in a certain order| `[boolean,number,number]`, `[number,text]` |
-| `{ name1:<type1>, name2:<type2> }` | Objects are tuples whose elements are identified by name instead of position  | `{x:number,y:number}`,`{id:text,value:number}`|
+| Type                               | Description                                                                     | Example type                                   |
+|:-----------------------------------|:--------------------------------------------------------------------------------|:-----------------------------------------------|
+| `[ <type1>, <type2> ]`             | Tuples are combinations of a fixed number of different types in a certain order | `[boolean,number,number]`, `[number,text]`     |
+| `{ name1:<type1>, name2:<type2> }` | Objects are tuples whose elements are identified by name instead of position    | `{x:number,y:number}`,`{id:text,value:number}` |
 
 The following complex data types may one day be implemented in III:
 
-| Type | Description | Example type |
-| --- | -- | -- |
-| `[ <type1>... ]` | **(Not implemented)** Arrays are combinations of variable number of identical types  | `[number...]`,`[text...]`|
-| `{ <typekey>:<typevalue>... }` | **(Not implemented)** Maps are arrays whose elements are identified by name instead of position  | `{text:number...}`,`{number:text...}`|
-| `[ <type1> or <type2> ]`| **(Not implemented)** Unions are tuples with only one value active at a time | `[ text or number ]`, `[ {x:number, y:number} or number ]`  |
-| `[  <type1> → <type2> ]`| **(Not implemented)** Pure functions with domain type1, codomain type2, and no side effects | `[number → text]`, `[void → number]`  |
+| Type                           | Description                                                                                     | Example type                                               |
+|:-------------------------------|:------------------------------------------------------------------------------------------------|:-----------------------------------------------------------|
+| `[ <type1>... ]`               | **(Not implemented)** Arrays are combinations of variable number of identical types             | `[number...]`,`[text...]`                                  |
+| `{ <typekey>:<typevalue>... }` | **(Not implemented)** Maps are arrays whose elements are identified by name instead of position | `{text:number...}`,`{number:text...}`                      |
+| `[ <type1> or <type2> ]`       | **(Not implemented)** Unions are tuples with only one value active at a time                    | `[ text or number ]`, `[ {x:number, y:number} or number ]` |
+| `[  <type1> → <type2> ]`       | **(Not implemented)** Pure functions with domain type1, codomain type2, and no side effects     | `[number → text]`, `[void → number]`                       |
 
 #### Tuples
 
@@ -258,7 +263,7 @@ Interaction involve exchange of complex data. Complex data should be part of the
 In combination with other languages features, complex data types enable very expressive code.
 
 
-### Data type vs Channel type
+### Data type vs Interface
 
 Types :
 
@@ -274,11 +279,9 @@ Types :
   - top type : `any` = `|<firsttype>,<secondtype>,...,<lasttype>|`
 
 
-
-
   The classical notion of data type encompass two different notions :
 
-  - Data type of a function declaration (e.g. `float sin(float x);`) : We call it **channel type** because it is the specification of the type of data that *can* be received or sent by an interaction. It does not specify the type of any actual data, but it merely gives the shape of the channel the data flows through. Channel types are not specified in most weakly typed languages. They are specified explicitely in III.
+  - Data type of a function declaration (e.g. `float sin(float x);`) : We call it **interface** because it is the specification of the type of data that *can* be received or sent by an interaction. It does not specify the type of any actual data, but it merely gives the shape of the channel the data flows through. Channel types are not specified in most weakly typed languages. They are specified explicitely in III.
   - Data type of a variable instantiation (e.g. `int x = 2;`) : We call it **data type** because it is the specification of the type of the actual data. Data types are often specified as `var` in weakly typed languages, and redundantly declared in strongly typed language. They are specified implicitely and infered automatically in III.
 
   In III, data types are specified implicitely, through instantiation, while channel types are specified explicitely.
@@ -312,23 +315,23 @@ Types :
 
   #### Truth table
 
-  | `((a)=(b))` | `(b)` | `(a)` |
-  |:-----------:|:-----:|:-----:|
-  | **active**| **_value_** | _value_ |
-  | **active**| **~** | ~ |
-  | **~**| **_value_** | ~ |
-  | **~**| **~** | ~ |
+| `((a)=(b))` |    `(b)`    |  `(a)`  |
+|:-----------:|:-----------:|:-------:|
+| **active**  | **_value_** | _value_ |
+| **active**  |    **~**    |    ~    |
+|    **~**    | **_value_** |    ~    |
+|    **~**    |    **~**    |    ~    |
 
   #### Example chronogram
 
   | Step | `((a)=(b))` | `(b)` | `(a)`|
-  |:--:|:--:|:--:|:--:|
-  |0| **~** | **4** | ~ |
-  |1| **~** | **5** | ~ |
-  |2| **active** | **6** | 6 |
-  |3| **active** | **7** | 7 |
-  |4| **active** | **~** | ~ |
-  |5| **~** | **9** | ~ |
+  |:-:|:----------:|:-----:|:-:|
+| 0 |   **~**    | **4** | ~ |
+| 1 |   **~**    | **5** | ~ |
+| 2 | **active** | **6** | 6 |
+| 3 | **active** | **7** | 7 |
+| 4 | **active** | **~** | ~ |
+| 5 |   **~**    | **9** | ~ |
 
   ### All
 
@@ -347,20 +350,20 @@ Types :
   #### Truth table
 
   | `(all(a)(b))` | `(b)` | `(a)` |
-  |:--:|:--:|:--:|
-  | **_value_**| _value_ | _value_ |
-  | **~**| ~ | ~ |
+  |:-----------:|:-------:|:-------:|
+| **_value_** | _value_ | _value_ |
+|    **~**    |    ~    |    ~    |
 
   #### Example chronogram
 
   | Step | `(all(a)(b))` | `(a)` | `(b)`|
-  |:--:|:--:|:--:|:--:|
-  |0| **~** | ~ | ~ |
-  |1| **~**  | ~ | ~ |
-  |2| **6**  | 6 | 6 |
-  |3| **7**  | 7 | 7 |
-  |4| **~**  | ~ | ~ |
-  |5| **8**  | 8 | 8 |
+  |:-:|:-----:|:-:|:-:|
+| 0 | **~** | ~ | ~ |
+| 1 | **~** | ~ | ~ |
+| 2 | **6** | 6 | 6 |
+| 3 | **7** | 7 | 7 |
+| 4 | **~** | ~ | ~ |
+| 5 | **8** | 8 | 8 |
 
   ### Either
 
@@ -381,26 +384,26 @@ Types :
   Non deterministically choosen between the two following tables:
 
   | `(either(a)(b))` | `(b)` | `(a)` |
-  |:--:|:--:|:--:|
-  | **_value_**| _value_ | ~|  
-  | **~**| ~ | ~ |
+  |:-----------:|:-------:|:-:|
+| **_value_** | _value_ | ~ |
+|    **~**    |    ~    | ~ |
 
 
   | `(either(a)(b))` | `(b)` | `(a)` |
-  |:--:|:--:|:--:|
-  | **_value_**| ~ | _value_  |
-  | **~**| ~ | ~ |
+  |:-----------:|:-:|:-------:|
+| **_value_** | ~ | _value_ |
+|    **~**    | ~ |    ~    |
 
   #### Example chronogram
 
   | Step | `(either(a)(b))` | `(a)` | `(b)`|
-  |:--:|:--:|:--:|:--:|
-  |0| **~** | ~ | ~ |
-  |1| **5**  | 5 | ~ |
-  |2| **6**  | ~ | 6 |
-  |3| **7**  | ~ | 7 |
-  |4| **~**  | ~ | ~ |
-  |5| **8**  | 8 | ~ |
+  |:-:|:-----:|:-:|:-:|
+| 0 | **~** | ~ | ~ |
+| 1 | **5** | 5 | ~ |
+| 2 | **6** | ~ | 6 |
+| 3 | **7** | ~ | 7 |
+| 4 | **~** | ~ | ~ |
+| 5 | **8** | 8 | ~ |
 
   ### When
 
@@ -419,22 +422,22 @@ Types :
   #### Truth table
 
   | `(when(a):(b))` | `(a)` | `(b)` |
-  |:-----------:|:-----:|:-----:|
-  | **active**| **active** | active |
-  | **active**| **~** | ~ |
-  | **~**| **active** | ~ |
-  | **~**| **~** | ~ |
+  |:----------:|:----------:|:------:|
+| **active** | **active** | active |
+| **active** |   **~**    |   ~    |
+|   **~**    | **active** |   ~    |
+|   **~**    |   **~**    |   ~    |
 
   #### Example chronogram
 
   | Step | `(when(a):(b))` | `(a)` | `(b)` |
-  |:--:|:--:|:--:|:--:|
-  |0| **~** | **active** | ~ |
-  |1| **~** | **active** | ~ |
-  |2| **active** | **active** | active |
-  |3| **active** | **active** | active |
-  |4| **active** | **~** | ~ |
-  |5| **~** | **active** | ~ |
+  |:-:|:----------:|:----------:|:------:|
+| 0 |   **~**    | **active** |   ~    |
+| 1 |   **~**    | **active** |   ~    |
+| 2 | **active** | **active** | active |
+| 3 | **active** | **active** | active |
+| 4 | **active** |   **~**    |   ~    |
+| 5 |   **~**    | **active** |   ~    |
 
   ### Always
 
@@ -453,18 +456,18 @@ Types :
   #### Truth table
 
   | `(always:(a))` | `(a)` |
-  |:-----------:|:-----:|:-----:|
-  | **active**| active |
-  | **~**| active |
+  |:----------:|:------:|::|
+| **active** | active |  |
+|   **~**    | active |  |
 
   #### Example chronogram
 
   | Step | `(always(a))` | `(a)` |
-  |:--:|:--:|:--:|
-  |0| **~** | active |
-  |1| **~** | active |
-  |2| **active** | active |
-  |3| **active**  | active |
+  |:-:|:----------:|:------:|
+| 0 |   **~**    | active |
+| 1 |   **~**    | active |
+| 2 | **active** | active |
+| 3 | **active** | active |
 
   ### Active
 
@@ -483,20 +486,20 @@ Types :
   #### Truth table
 
   | `(a)` |`(active(a))` |
-  |:--:|:--:|
-  | **_value_**| true |
-  | **~**| false |
+  |:-----------:|:-----:|
+| **_value_** | true  |
+|    **~**    | false |
 
   #### Example chronogram
 
   | Step | `(a)` | `(active(a))` |
-  |:--:|:--:|:--:|
-  |0| **~** |false |
-  |1| **3**  | true |
-  |2| **4** | true |
-  |3| **~**  | false |
-  |4| **5**  | true |
-  |5| **~**  | false |
+  |:-:|:-----:|:-----:|
+| 0 | **~** | false |
+| 1 | **3** | true  |
+| 2 | **4** | true  |
+| 3 | **~** | false |
+| 4 | **5** | true  |
+| 5 | **~** | false |
 
   ### Previous
 
@@ -515,13 +518,13 @@ Types :
   #### Example chronogram
 
   | Step | `(a)` | `(previous(a))` |
-  |:--:|:--:|:--:|
-  |0| **~** | ~ |
-  |1| **5**  | ~ |
-  |2| **6** | 5 |
-  |3| **~**  | 6 |
-  |4| **8**  | ~ |
-  |5| **~**  | 8|
+  |:-:|:-----:|:-:|
+| 0 | **~** | ~ |
+| 1 | **5** | ~ |
+| 2 | **6** | 5 |
+| 3 | **~** | 6 |
+| 4 | **8** | ~ |
+| 5 | **~** | 8 |
 
   ### Init
 
@@ -540,13 +543,13 @@ Types :
   #### Example chronogram
 
   | Step | `(init)` |
-  |:--:|:--:|
-  |0| active |
-  |1| ~  |
-  |2| ~ |
-  |3| ~  |
-  |4| ~  |
-  |5| ~  |
+  |:-:|:------:|
+| 0 | active |
+| 1 |   ~    |
+| 2 |   ~    |
+| 3 |   ~    |
+| 4 |   ~    |
+| 5 |   ~    |
 
   ### Default
 
@@ -565,21 +568,21 @@ Types :
   #### Truth table
 
   | `(a)` | `(b)` | `((a)default(b))` |
-  |:-----------:|:-----:|:-----:|
-  | **_value a_**| **_value b_** | _value a_ |
-  | **_value a_**| **~** | _value a_ |
-  | **~**| **_value b_** | _value b_ |
-  | **~**| **~** | ~ |
+  |:-------------:|:-------------:|:---------:|
+| **_value a_** | **_value b_** | _value a_ |
+| **_value a_** |     **~**     | _value a_ |
+|     **~**     | **_value b_** | _value b_ |
+|     **~**     |     **~**     |     ~     |
 
   #### Example chronogram
 
   | Step |  `(a)` | `(b)` | `((a)default(b))` |
-  |:--:|:--:|:--:|:--:|
-  |0| **~** | **0** | 0 |
-  |1| **~** | **~**| ~ |
-  |2| **3** | **~** | 3 |
-  |3| **4** | **5** | 4 |
-  |5| **~** | **2** | 2 |
+  |:-:|:-----:|:-----:|:-:|
+| 0 | **~** | **0** | 0 |
+| 1 | **~** | **~** | ~ |
+| 2 | **3** | **~** | 3 |
+| 3 | **4** | **5** | 4 |
+| 5 | **~** | **2** | 2 |
 
   ### Flow
 
@@ -602,15 +605,15 @@ Types :
   #### Example chronogram
 
   | Step | `(flow(a)change(b))` | `(b)` | `(a)`|
-  |:--:|:--:|:--:|:--:|
-  |0| **~** | **~** | ~ |
-  |1| **active** | **5** | 5 |
-  |2| **active** | **~** | 5 |
-  |3| **active** | **~** | 5 |
-  |4| **active** | **3** |3 |
-  |5| **active** | **~** | 3 |
-  |6| **active** | **~** | 3 |
-  |7| **~** | **~** | ~ |
+  |:-:|:----------:|:-----:|:-:|
+| 0 |   **~**    | **~** | ~ |
+| 1 | **active** | **5** | 5 |
+| 2 | **active** | **~** | 5 |
+| 3 | **active** | **~** | 5 |
+| 4 | **active** | **3** | 3 |
+| 5 | **active** | **~** | 3 |
+| 6 | **active** | **~** | 3 |
+| 7 |   **~**    | **~** | ~ |
 
   ## Advanced Interactions semantics
 
@@ -631,15 +634,15 @@ Types :
   Associated chronogram
 
   | Step | `(func)` | `(data)`| `(apply(func)on(a))` |
-  |:--:|:--:|:--:|:--:|
-  |0| **~** | **0** | ~ |
-  |1| **sin** | **0** | 0. |
-  |2| **sin** | **2** | 0.909 |
-  |3| **sin** | **~** | ~ |
-  |4| **~** | **3** | ~ |
-  |5| **cos** | **4** | -0.653 |
-  |6| **cos** | **5** | 0.283 |
-  |7| **~** | **6** | ~ |
+  |:-:|:-------:|:-----:|:------:|
+| 0 |  **~**  | **0** |   ~    |
+| 1 | **sin** | **0** |   0.   |
+| 2 | **sin** | **2** | 0.909  |
+| 3 | **sin** | **~** |   ~    |
+| 4 |  **~**  | **3** |   ~    |
+| 5 | **cos** | **4** | -0.653 |
+| 6 | **cos** | **5** | 0.283  |
+| 7 |  **~**  | **6** |   ~    |
 
 
 

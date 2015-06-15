@@ -1,9 +1,12 @@
-// RDF/graph database by Vincent Lecrubier available on npm
+// RDF/graph database by Vincent Lecrubier crubier.github.io/Hexastore
 var Hexastore = require('hexastore');
 
 // Console output coloring module
 var Chalk = require('chalk');
 
+var Parser = require('./parser.js');
+
+var Resolver = require('./resolver.js');
 
 var Compiler = function() {
 
@@ -12,23 +15,7 @@ var Compiler = function() {
 // Compile a string containing valid III code into a string containing JS Executable code.
 Compiler.prototype.iii2js = function(iiistring) {
 
-
-  // // Parse
-  // var interaction = require('./iiiParser.js').parse(iiistring);
-  //
-  // // Link = add imported files to the source recursively
-  // var linked = require('./iiiLinker.js').link(interaction);
-  //
-  // // Validate
-  // var validated = require('./iiiValidator.js').validate(linked);
-  // // Flatten
-  // var flattened = require('./iiiFlattener.js').flatten(validated);
-  // // Sequentialize
-  // var sequentialized = require('./iiiSequentializer.js').sequentialize(flattened);
-  // // Generate
-  // var generated = require('./iiiGeneratorJS.js').generate(sequentialized);
-
-
+  var graph = new Hexastore();
 
   // Compilation algorithm
   // Start with an empty graph
@@ -42,6 +29,15 @@ Compiler.prototype.iii2js = function(iiistring) {
   // We added those to the graph :
   //   One node for each syntactic element of each file
   //   One edge for each syntactic link expression composition
+
+  var ast = Parser.parse(iiistring);
+
+  // var triples = objectToPathTriples(ast,"main");
+
+  // graph.addJSObjectAsPath(triples);
+
+
+
 
   // Resolve references (linking/flattening)
   // We added those to the graph :
@@ -59,17 +55,20 @@ Compiler.prototype.iii2js = function(iiistring) {
 
 
 
+
+
+
+
+
 // Dispatch compilation command to different compiling function iii2xxx
 Compiler.prototype.compile = function(iiiString) {
+  // return this.iii2js(iiiString);
+  //
+  //
+  //
+  var ast = Parser.parse(iiistring);
 
-  try {
 
-
-
-
-  } catch (error) {
-    console.log(Chalk.red("Error : ") + error.message);
-  }
 };
 
 module.exports = new Compiler();

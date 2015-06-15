@@ -1,0 +1,37 @@
+
+a Color is a {red:Number,green:Number,blue:Number,alpha:Number}
+
+a Image is a {red:[[Number]],green:[[Number]],blue:[[Number]],alpha:[[Number]]}
+
+a Audio is a {left:Number,right:Number}
+
+a Vector2D is a {x:Number,y:Number}
+
+a Mouse is a {move:Vector2D,Button:[Number]}
+
+a Keyboard is a [Text]
+
+a WimpInterface is a {
+  screen : Image out,
+  audio : Audio out,
+  mouse : Mouse in,
+  keyboard : Keyboard in
+}
+
+
+
+
+
+
+
+
+
+
+(main):activation = let
+
+
+
+
+
+in
+  (ok)

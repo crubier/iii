@@ -1,0 +1,19 @@
+interaction
+  (main):Number out
+is
+  ((b)+(5))
+with
+
+  interaction
+    (b):Number out
+  is
+    ((res)with(`o=getB();`)()=(res))
+  with
+    interaction (res):Number ref is ()
+
+  interaction
+    ((x:Number in)+(y:Number in)):Number out
+  is
+    ((res) with (`o=i.x+i.y;`) ({x:(x),y:(y)}) = (res))
+  with
+    interaction (res):Number ref is ()
