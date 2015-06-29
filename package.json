@@ -1,6 +1,6 @@
 {
   "name": "iii",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "The interactive interacting interactors framework",
   "main": "index.js",
   "scripts": {
