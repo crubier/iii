@@ -68,14 +68,14 @@ content 'a definition or an import statement'
 / _ 'import' _ package:[^`]* _ {return parse(fs.readFileSync(filename.join(''),{encoding:'utf8'}));}
 
 definition 'an interaction definition'
-= _ 'interaction' _ signature:signature  _ definitions:(_ 'with' _ definitions:definitions {return definitions;})? _'is' _ expression:expression  _{ return {type:'Definition',expression:expression,signature:signature,definitions:(definitions===null?[]:definitions)};}
+= _ 'interaction' _ signature:signature  _ definitions:(_ 'with' _ definitions:definitions {return definitions;})? _'is' _ interaction:interaction  _{ return {type:'Definition',interaction:interaction,signature:signature,definitions:(definitions===null?[]:definitions)};}
 
 signature 'an interaction signature specification'
 = '('  elements:signatureElement* _ ')' _ ':' _ interface:interface { var temp = mergeSignature(elements);return {type:'Signature',interface:interface,operator:temp.operator,operand:temp.operand};}
 
 signatureElement 'a signature element'
-= _ operator:operatoridentifier {return {operator:operator};}
-/ _ '(' _ name:variableidentifier _':'_ interface:interface _ ')' {return {operand:{interface:interface,name:name}};}
+= _ operator:operatorIdentifier {return {operator:operator};}
+/ _ '(' _ name:variableIdentifier _':'_ interface:interface _ ')' {return {operand:{interface:interface,name:name}};}
 
 
 
@@ -95,7 +95,7 @@ interfaceAtomic 'the specification of an atomic interface'
 = data:data _ direction:direction {return {type:'InterfaceAtomic',data:data,direction:direction};}
 
 interfaceComposite 'the specification of a composite interface'
-= '{' _ first:(key:keyidentifier _ ':' _ value:interface {return {type:'InterfaceCompositeElement',key:key,value:value}}) _ rest:(',' _ content:(key:keyidentifier _ ':' _ value:interface {return {type:'InterfaceCompositeElement',key:key,value:value}}) _ {return content;})* '}' {return {type:'InterfaceComposite',element:mergeElements(first,rest)};}
+= '{' _ first:(key:keyIdentifier _ ':' _ value:interface {return {type:'InterfaceCompositeElement',key:key,value:value}}) _ rest:(',' _ content:(key:keyIdentifier _ ':' _ value:interface {return {type:'InterfaceCompositeElement',key:key,value:value}}) _ {return content;})* '}' {return {type:'InterfaceComposite',element:mergeElements(first,rest)};}
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -111,10 +111,10 @@ dataOperator 'an data type operator (union,intersection,complement)'
 = 'union' / 'intersection' / 'complement'
 
 dataAtomic 'the specification of an atomic data type'
-= name:dataidentifier {return {type:'DataAtomic',name:name}}
+= name:dataIdentifier {return {type:'DataAtomic',name:name}}
 
 dataComposite 'the specification of a composite data type'
-= '{' _ first:(key:keyidentifier _ ':' _ value:data {return {type:'DataCompositeElement',key:key,value:value}}) _ rest:(',' _ content:(key:keyidentifier _ ':' _ value:data {return {type:'DataCompositeElement',key:key,value:value}}) _ {return content;})* '}' {return {type:'DataComposite',element:mergeElements(first,rest)};}
+= '{' _ first:(key:keyIdentifier _ ':' _ value:data {return {type:'DataCompositeElement',key:key,value:value}}) _ rest:(',' _ content:(key:keyIdentifier _ ':' _ value:data {return {type:'DataCompositeElement',key:key,value:value}}) _ {return content;})* '}' {return {type:'DataComposite',element:mergeElements(first,rest)};}
 
 dataArray 'the specification of an array type'
 = '[' _ element:data _ ']' {return {type:'DataArray',element:element};}
@@ -128,33 +128,33 @@ direction 'the direction of a data flow'
 = 'out' / 'in' / 'ref'
 
 ////////////////////////////////////////////////////////////////////////////////
-// Interaction expressions
-expression 'an interaction expression'
-= '(' elements:expressionelement* _ ')' {var temp=  mergeExpression(elements);return {type:'ExpressionSimple',operator:temp.operator,operand:temp.operand};}
+// Interaction
+interaction 'an interaction'
+= '(' elements:interactionElement* _ ')' {var temp=  mergeExpression(elements);return {type:'ExpressionSimple',operator:temp.operator,operand:temp.operand};}
 / '(js`' val:[^`]* '`)'  {return {type:'ExpressionJavascript',native:esprima.parse(val.join(''))};}
 
 
-expressionelement 'an expression element'
-= _ operand:expression {return {operand:operand};}
-/ _ operator:operatoridentifier {return {operator:operator};}
+interactionElement 'an interaction element'
+= _ operand:interaction {return {operand:operand};}
+/ _ operator:operatorIdentifier {return {operator:operator};}
 
 
 ////////////////////////////////////////////////////////////////////////////////
 // Literals and leaves of the AST
 
-operatoridentifier 'an operator identifier'
+operatorIdentifier 'an operator identifier'
 = val:[^ \t\r\n$_\(\)\`]+ { return val.join(''); }
 
-interfaceidentifier 'an interface identifier'
+interfaceIdentifier 'an interface identifier'
 = first:[A-Z] rest:[a-zA-Z0-9]* { return mergeElements(first,rest).join(''); }
 
-dataidentifier 'a data identifier'
+dataIdentifier 'a data identifier'
 = first:[A-Z] rest:[a-zA-Z0-9]* { return mergeElements(first,rest).join(''); }
 
-variableidentifier 'a variable identifier'
+variableIdentifier 'a variable identifier'
 = first:[a-z] rest:[a-zA-Z0-9]* { return mergeElements(first,rest).join(''); }
 
-keyidentifier 'a key identifier'
+keyIdentifier 'a key identifier'
 = first:[a-z] rest:[a-zA-Z0-9]* { return mergeElements(first,rest).join(''); }
 
 _ 'white space'

@@ -52,7 +52,7 @@ module.exports = (function() {
         peg$c17 = { type: "literal", value: "with", description: "\"with\"" },
         peg$c18 = "is",
         peg$c19 = { type: "literal", value: "is", description: "\"is\"" },
-        peg$c20 = function(signature, definitions, expression) { return {type:'Definition',expression:expression,signature:signature,definitions:(definitions===null?[]:definitions)};},
+        peg$c20 = function(signature, definitions, interaction) { return {type:'Definition',interaction:interaction,signature:signature,definitions:(definitions===null?[]:definitions)};},
         peg$c21 = { type: "other", description: "an interaction signature specification" },
         peg$c22 = "(",
         peg$c23 = { type: "literal", value: "(", description: "\"(\"" },
@@ -124,14 +124,14 @@ module.exports = (function() {
         peg$c89 = { type: "literal", value: "in", description: "\"in\"" },
         peg$c90 = "ref",
         peg$c91 = { type: "literal", value: "ref", description: "\"ref\"" },
-        peg$c92 = { type: "other", description: "an interaction expression" },
+        peg$c92 = { type: "other", description: "an interaction" },
         peg$c93 = function(elements) {var temp=  mergeExpression(elements);return {type:'ExpressionSimple',operator:temp.operator,operand:temp.operand};},
         peg$c94 = "(js`",
         peg$c95 = { type: "literal", value: "(js`", description: "\"(js`\"" },
         peg$c96 = "`)",
         peg$c97 = { type: "literal", value: "`)", description: "\"`)\"" },
         peg$c98 = function(val) {return {type:'ExpressionJavascript',native:esprima.parse(val.join(''))};},
-        peg$c99 = { type: "other", description: "an expression element" },
+        peg$c99 = { type: "other", description: "an interaction element" },
         peg$c100 = function(operand) {return {operand:operand};},
         peg$c101 = { type: "other", description: "an operator identifier" },
         peg$c102 = /^[^ \t\r\n$_()`]/,
@@ -546,7 +546,7 @@ module.exports = (function() {
                     if (s8 !== peg$FAILED) {
                       s9 = peg$parse_();
                       if (s9 !== peg$FAILED) {
-                        s10 = peg$parseexpression();
+                        s10 = peg$parseinteraction();
                         if (s10 !== peg$FAILED) {
                           s11 = peg$parse_();
                           if (s11 !== peg$FAILED) {
@@ -701,7 +701,7 @@ module.exports = (function() {
       s0 = peg$currPos;
       s1 = peg$parse_();
       if (s1 !== peg$FAILED) {
-        s2 = peg$parseoperatoridentifier();
+        s2 = peg$parseoperatorIdentifier();
         if (s2 !== peg$FAILED) {
           peg$reportedPos = s0;
           s1 = peg$c30(s2);
@@ -728,7 +728,7 @@ module.exports = (function() {
           if (s2 !== peg$FAILED) {
             s3 = peg$parse_();
             if (s3 !== peg$FAILED) {
-              s4 = peg$parsevariableidentifier();
+              s4 = peg$parsevariableIdentifier();
               if (s4 !== peg$FAILED) {
                 s5 = peg$parse_();
                 if (s5 !== peg$FAILED) {
@@ -1109,7 +1109,7 @@ module.exports = (function() {
         s2 = peg$parse_();
         if (s2 !== peg$FAILED) {
           s3 = peg$currPos;
-          s4 = peg$parsekeyidentifier();
+          s4 = peg$parsekeyIdentifier();
           if (s4 !== peg$FAILED) {
             s5 = peg$parse_();
             if (s5 !== peg$FAILED) {
@@ -1164,7 +1164,7 @@ module.exports = (function() {
                 s8 = peg$parse_();
                 if (s8 !== peg$FAILED) {
                   s9 = peg$currPos;
-                  s10 = peg$parsekeyidentifier();
+                  s10 = peg$parsekeyIdentifier();
                   if (s10 !== peg$FAILED) {
                     s11 = peg$parse_();
                     if (s11 !== peg$FAILED) {
@@ -1239,7 +1239,7 @@ module.exports = (function() {
                   s8 = peg$parse_();
                   if (s8 !== peg$FAILED) {
                     s9 = peg$currPos;
-                    s10 = peg$parsekeyidentifier();
+                    s10 = peg$parsekeyIdentifier();
                     if (s10 !== peg$FAILED) {
                       s11 = peg$parse_();
                       if (s11 !== peg$FAILED) {
@@ -1563,7 +1563,7 @@ module.exports = (function() {
 
       peg$silentFails++;
       s0 = peg$currPos;
-      s1 = peg$parsedataidentifier();
+      s1 = peg$parsedataIdentifier();
       if (s1 !== peg$FAILED) {
         peg$reportedPos = s0;
         s1 = peg$c69(s1);
@@ -1594,7 +1594,7 @@ module.exports = (function() {
         s2 = peg$parse_();
         if (s2 !== peg$FAILED) {
           s3 = peg$currPos;
-          s4 = peg$parsekeyidentifier();
+          s4 = peg$parsekeyIdentifier();
           if (s4 !== peg$FAILED) {
             s5 = peg$parse_();
             if (s5 !== peg$FAILED) {
@@ -1649,7 +1649,7 @@ module.exports = (function() {
                 s8 = peg$parse_();
                 if (s8 !== peg$FAILED) {
                   s9 = peg$currPos;
-                  s10 = peg$parsekeyidentifier();
+                  s10 = peg$parsekeyIdentifier();
                   if (s10 !== peg$FAILED) {
                     s11 = peg$parse_();
                     if (s11 !== peg$FAILED) {
@@ -1724,7 +1724,7 @@ module.exports = (function() {
                   s8 = peg$parse_();
                   if (s8 !== peg$FAILED) {
                     s9 = peg$currPos;
-                    s10 = peg$parsekeyidentifier();
+                    s10 = peg$parsekeyIdentifier();
                     if (s10 !== peg$FAILED) {
                       s11 = peg$parse_();
                       if (s11 !== peg$FAILED) {
@@ -2026,7 +2026,7 @@ module.exports = (function() {
       return s0;
     }
 
-    function peg$parseexpression() {
+    function peg$parseinteraction() {
       var s0, s1, s2, s3, s4;
 
       peg$silentFails++;
@@ -2040,10 +2040,10 @@ module.exports = (function() {
       }
       if (s1 !== peg$FAILED) {
         s2 = [];
-        s3 = peg$parseexpressionelement();
+        s3 = peg$parseinteractionElement();
         while (s3 !== peg$FAILED) {
           s2.push(s3);
-          s3 = peg$parseexpressionelement();
+          s3 = peg$parseinteractionElement();
         }
         if (s2 !== peg$FAILED) {
           s3 = peg$parse_();
@@ -2137,14 +2137,14 @@ module.exports = (function() {
       return s0;
     }
 
-    function peg$parseexpressionelement() {
+    function peg$parseinteractionElement() {
       var s0, s1, s2;
 
       peg$silentFails++;
       s0 = peg$currPos;
       s1 = peg$parse_();
       if (s1 !== peg$FAILED) {
-        s2 = peg$parseexpression();
+        s2 = peg$parseinteraction();
         if (s2 !== peg$FAILED) {
           peg$reportedPos = s0;
           s1 = peg$c100(s2);
@@ -2161,7 +2161,7 @@ module.exports = (function() {
         s0 = peg$currPos;
         s1 = peg$parse_();
         if (s1 !== peg$FAILED) {
-          s2 = peg$parseoperatoridentifier();
+          s2 = peg$parseoperatorIdentifier();
           if (s2 !== peg$FAILED) {
             peg$reportedPos = s0;
             s1 = peg$c30(s2);
@@ -2184,7 +2184,7 @@ module.exports = (function() {
       return s0;
     }
 
-    function peg$parseoperatoridentifier() {
+    function peg$parseoperatorIdentifier() {
       var s0, s1, s2;
 
       peg$silentFails++;
@@ -2225,7 +2225,7 @@ module.exports = (function() {
       return s0;
     }
 
-    function peg$parseinterfaceidentifier() {
+    function peg$parseinterfaceIdentifier() {
       var s0, s1, s2, s3;
 
       peg$silentFails++;
@@ -2277,7 +2277,7 @@ module.exports = (function() {
       return s0;
     }
 
-    function peg$parsedataidentifier() {
+    function peg$parsedataIdentifier() {
       var s0, s1, s2, s3;
 
       peg$silentFails++;
@@ -2329,7 +2329,7 @@ module.exports = (function() {
       return s0;
     }
 
-    function peg$parsevariableidentifier() {
+    function peg$parsevariableIdentifier() {
       var s0, s1, s2, s3;
 
       peg$silentFails++;
@@ -2381,7 +2381,7 @@ module.exports = (function() {
       return s0;
     }
 
-    function peg$parsekeyidentifier() {
+    function peg$parsekeyIdentifier() {
       var s0, s1, s2, s3;
 
       peg$silentFails++;
