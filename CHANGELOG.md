@@ -12,3 +12,11 @@
 # 0.0.3
 
 - Quick fix
+
+# 0.0.4
+
+- Quick fix
+
+# 0.0.5
+
+- Quick fix again
