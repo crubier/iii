@@ -25,3 +25,7 @@
 # 0.0.6
 
 - Change The parser stating rule
+
+# 0.0.7
+
+- Add various parsing start rules

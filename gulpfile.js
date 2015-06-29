@@ -41,7 +41,9 @@ gulp.task('javascript',function() {
 
 gulp.task('parser',function() {
   return gulp.src('src/**/*.pegjs')
-  .pipe(peg())
+  .pipe(peg({
+    allowedStartRules:["start","interaction","interface","data"]
+  }))
   .pipe(gulp.dest('dist'));
 });
 
