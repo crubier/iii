@@ -65,4 +65,6 @@ gulp.task('watch',['dist'], function() {
   gulp.watch('example/**/*.*', ['test']);
 });
 
+gulp.task('prepublish',['dist']);
+
 gulp.task('default', ['dist']);

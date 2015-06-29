@@ -1,14 +1,11 @@
 {
   "name": "iii",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "The interactive interacting interactors framework",
-  "main": "lib/index.js",
-  "bin": {
-    "iii": "lib/cli.js"
-  },
+  "main": "index.js",
   "directories": {
     "test": "test",
-    "lib": "lib",
+    "dist": "dist",
     "doc": "doc",
     "example": "example"
   },
@@ -20,8 +17,8 @@
     "example/"
   ],
   "scripts": {
-    "test": "jest",
-    "prepublish": "gulp"
+    "test": "gulp jest",
+    "prepublish": "gulp prepublish"
   },
   "repository": {
     "type": "git",
