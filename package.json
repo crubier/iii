@@ -3,19 +3,6 @@
   "version": "0.0.3",
   "description": "The interactive interacting interactors framework",
   "main": "index.js",
-  "directories": {
-    "test": "test",
-    "dist": "dist",
-    "doc": "doc",
-    "example": "example"
-  },
-  "files": [
-    "CHANGELOG.md",
-    "README.md",
-    "package.json",
-    "lib/",
-    "example/"
-  ],
   "scripts": {
     "test": "gulp jest",
     "prepublish": "gulp prepublish"
