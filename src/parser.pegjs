@@ -56,8 +56,8 @@
 //TODO
 
 start
-= _ interface _
-/*= _ definitions:definitions _ {return definitions;}*/
+/*= _ interface _*/
+= _ definitions:definitions _ {return definitions;}
 
 
 definitions 'a list of definitions'

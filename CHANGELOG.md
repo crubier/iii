@@ -20,3 +20,8 @@
 # 0.0.5
 
 - Quick fix again
+
+
+# 0.0.6
+
+- Change The parser stating rule
