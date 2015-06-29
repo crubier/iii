@@ -32,9 +32,10 @@ Compiler.prototype.iii2js = function(iiistring) {
 
   var ast = Parser.parse(iiistring);
 
-  var triples = objectToPathTriples(ast,"main");
+  // var triples = objectToPathTriples(ast,"main");
 
-  graph.addJSObjectAsPath(triples);
+  // graph.addJSObjectAsPath(triples);
+
 
 
 
@@ -54,9 +55,20 @@ Compiler.prototype.iii2js = function(iiistring) {
 
 
 
+
+
+
+
+
 // Dispatch compilation command to different compiling function iii2xxx
 Compiler.prototype.compile = function(iiiString) {
-  return this.iii2js(iiiString);
+  // return this.iii2js(iiiString);
+  //
+  //
+  //
+  var ast = Parser.parse(iiistring);
+
+
 };
 
 module.exports = new Compiler();

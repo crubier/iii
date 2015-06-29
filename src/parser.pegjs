@@ -50,14 +50,15 @@
   }
 }
 
-
 ////////////////////////////////////////////////////////////////////////////////
 
 // High level elements
 //TODO
 
 start
-= _ definitions:definitions _ {return definitions;}
+= _ interface _
+/*= _ definitions:definitions _ {return definitions;}*/
+
 
 definitions 'a list of definitions'
 = _ content:content* _ {return flatten(content);}
@@ -91,7 +92,7 @@ interfaceOperator 'an interface operator (conjugation,globalisation,localisation
 = 'conjugation' / 'globalisation' / 'localisation' / 'reception' / 'emission' / 'union' / 'intersection' / 'complement'
 
 interfaceAtomic 'the specification of an atomic interface'
-= datatype:datatype _ direction:direction {return {type:'InterfaceAtomic',datatype:datatype,direction:direction};}
+= data:data _ direction:direction {return {type:'InterfaceAtomic',data:data,direction:direction};}
 
 interfaceComposite 'the specification of a composite interface'
 = '{' _ first:(key:keyidentifier _ ':' _ value:interface {return {type:'InterfaceCompositeElement',key:key,value:value}}) _ rest:(',' _ content:(key:keyidentifier _ ':' _ value:interface {return {type:'InterfaceCompositeElement',key:key,value:value}}) _ {return content;})* '}' {return {type:'InterfaceComposite',element:mergeElements(first,rest)};}
@@ -100,26 +101,26 @@ interfaceComposite 'the specification of a composite interface'
 ////////////////////////////////////////////////////////////////////////////////
 // Data Types specifications
 
-type 'the specification of a data type'
-= typeAtomic / typeComposite / typeArray / typeFunction / typeOperation
+data 'the specification of a data type'
+= dataAtomic / dataComposite / dataArray / dataFunction / dataOperation
 
-typeOperation 'the specification of an data type using operators'
-= operator:typeOperator _ '(' _ first:type rest:(_',' _ content:type {return content;})* _')' { return {type:"TypeOperation",operator:operator,operand:mergeElements(first,rest)}}
+dataOperation 'the specification of an data type using operators'
+= operator:dataOperator _ '(' _ first:data rest:(_',' _ content:data {return content;})* _')' { return {type:"DataOperation",operator:operator,operand:mergeElements(first,rest)}}
 
-typeOperator 'an data type operator (union,intersection,complement)'
+dataOperator 'an data type operator (union,intersection,complement)'
 = 'union' / 'intersection' / 'complement'
 
-typeAtomic 'the specification of an atomic data type'
-= name:datatypeidentifier {return {type:'TypeAtomic',name:name}}
+dataAtomic 'the specification of an atomic data type'
+= name:dataidentifier {return {type:'DataAtomic',name:name}}
 
-typeComposite 'the specification of a composite data type'
-= '{' _ first:(key:keyidentifier _ ':' _ value:type {return {type:'TypeCompositeElement',key:key,value:value}}) _ rest:(',' _ content:(key:keyidentifier _ ':' _ value:type {return {type:'TypeCompositeElement',key:key,value:value}}) _ {return content;})* '}' {return {type:'TypeComposite',element:mergeElements(first,rest)};}
+dataComposite 'the specification of a composite data type'
+= '{' _ first:(key:keyidentifier _ ':' _ value:data {return {type:'DataCompositeElement',key:key,value:value}}) _ rest:(',' _ content:(key:keyidentifier _ ':' _ value:data {return {type:'DataCompositeElement',key:key,value:value}}) _ {return content;})* '}' {return {type:'DataComposite',element:mergeElements(first,rest)};}
 
-typeArray 'the specification of an array type'
-= '[' _ element:type _ ']' {return {type:'TypeArray',element:element};}
+dataArray 'the specification of an array type'
+= '[' _ element:data _ ']' {return {type:'DataArray',element:element};}
 
-typeFunction 'the specification of a function type'
-= '(' _ domain:type _ ('→'/'->') _ codomain:type _')'{return {type:'TypeFunction',domain:domain,codomain:codomain};}
+dataFunction 'the specification of a function type'
+= '(' _ domain:data _ ('→'/'->') _ codomain:data _')'{return {type:'DataFunction',domain:domain,codomain:codomain};}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Direction
@@ -147,7 +148,7 @@ operatoridentifier 'an operator identifier'
 interfaceidentifier 'an interface identifier'
 = first:[A-Z] rest:[a-zA-Z0-9]* { return mergeElements(first,rest).join(''); }
 
-datatypeidentifier 'a data type identifier'
+dataidentifier 'a data identifier'
 = first:[A-Z] rest:[a-zA-Z0-9]* { return mergeElements(first,rest).join(''); }
 
 variableidentifier 'a variable identifier'

@@ -1,79 +1,79 @@
-jest.dontMock('../dataTypes').dontMock('lodash');
+jest.dontMock('../data').dontMock('lodash');
 
-describe('data types', function() {
-  var types = require('../dataTypes');
+describe('data data', function() {
+  var data = require('../data');
 
 
   describe('validation', function() {
-    it('should detect invalid types', function() {
+    it('should detect invalid data', function() {
 
-      expect(types.isValid({
+      expect(data.isValid({
         bob: "lol"
       })).toBeFalsy();
 
-      expect(types.isValid({
+      expect(data.isValid({
         type: "Bobie"
       })).toBeFalsy();
 
-      expect(types.isValid({
-        type: "TypeAtomic"
+      expect(data.isValid({
+        type: "DataAtomic"
       })).toBeFalsy();
 
-      expect(types.isValid({
-        type: "TypeComposite"
+      expect(data.isValid({
+        type: "DataComposite"
       })).toBeFalsy();
 
-      expect(types.isValid({
-        type: "TypeFunction"
+      expect(data.isValid({
+        type: "DataFunction"
       })).toBeFalsy();
 
-      expect(types.isValid({
-        type: "TypeArray"
+      expect(data.isValid({
+        type: "DataArray"
       })).toBeFalsy();
 
-      expect(types.isValid({
-        type: "TypeOperation"
+      expect(data.isValid({
+        type: "DataOperation"
       })).toBeFalsy();
     });
 
-    describe('valid types', function() {
+    describe('valid data', function() {
 
       it('should detect valid atomic type', function() {
-        expect(types.isValid({
-          type: "TypeAtomic",
+        expect(data.isValid({
+          type: "DataAtomic",
           name: "Boolean"
         })).toBeTruthy();
       });
 
       it('should detect valid composite type', function() {
-        expect(types.isValid({
-          type: "TypeComposite",
-          element: [{type:"TypeCompositeElement",key:"joe",value:{
-            type: "TypeAtomic",
+        expect(data.isValid({
+          type: "DataComposite",
+          element: [{type:"DataCompositeElement",key:"joe",value:{
+            type: "DataAtomic",
             name: "Boolean"
           }}]
         })).toBeTruthy();
       });
 
       it('should detect valid function type', function() {
-        expect(types.isValid({
-          type: "TypeFunction",
+        expect(data.isValid({
+          type: "DataFunction",
           domain: {
-            type: "TypeAtomic",
+            type: "DataAtomic",
             name: "Boolean"
           },
           codomain: {
-            type: "TypeAtomic",
+            type: "DataAtomic",
             name: "Number"
           }
         })).toBeTruthy();
       });
 
       it('should detect valid array type', function() {
-        expect(types.isValid({
-          type: "TypeArray",
+        expect(data.isValid({
+          type: "DataArray",
           element: {
-            type: "TypeAtomic",
+            type: "DataAtomic",
             name: "Text"
           }
         })).toBeTruthy();
@@ -81,21 +81,21 @@ describe('data types', function() {
 
 //TODO
       it('should detect valid operation type', function() {
-        expect(types.isValid({
-          type: "TypeOperation",
+        expect(data.isValid({
+          type: "DataOperation",
           operator: 'union',
           operand: [
             {
-              type: "TypeComposite",
-              element: [{type:"TypeCompositeElement",key:"joe",value:{
-                type: "TypeAtomic",
+              type: "DataComposite",
+              element: [{type:"DataCompositeElement",key:"joe",value:{
+                type: "DataAtomic",
                 name: "Boolean"
               }}]
             },
             {
-              type: "TypeComposite",
-              element: [{type:"TypeCompositeElement",key:"bob",value:{
-                type: "TypeAtomic",
+              type: "DataComposite",
+              element: [{type:"DataCompositeElement",key:"bob",value:{
+                type: "DataAtomic",
                 name: "Number"
               }}]
             }
@@ -105,11 +105,11 @@ describe('data types', function() {
 
 //TODO
       // it('should prevent invalid operation type', function() {
-      //   expect(types.isValid({
-      //     type: "TypeOperation",
+      //   expect(data.isValid({
+      //     type: "DataOperation",
       //     operator: 'union',
       //     operand: [{
-      //       type: "TypeAtomic",
+      //       type: "DataAtomic",
       //       name: "Boolean"
       //     }]
       //   })).toBeFalsy();
@@ -122,15 +122,15 @@ describe('data types', function() {
 
   describe('compare', function() {
 
-    describe('mixed types', function() {
+    describe('mixed data', function() {
       it('should detect difference', function() {
-        expect(types.compare({
-          type: "TypeAtomic",
+        expect(data.compare({
+          type: "DataAtomic",
           name: "Number"
         }, {
-          type: "TypeArray",
+          type: "DataArray",
           element: {
-            type: "TypeAtomic",
+            type: "DataAtomic",
             name: "Boolean"
           }
         })).toBeFalsy();
@@ -140,20 +140,20 @@ describe('data types', function() {
 
     describe('atomic', function() {
       it('should detect equality', function() {
-        expect(types.compare({
-          type: "TypeAtomic",
+        expect(data.compare({
+          type: "DataAtomic",
           name: "Number"
         }, {
-          type: "TypeAtomic",
+          type: "DataAtomic",
           name: "Number"
         })).toBeTruthy();
       });
       it('should detect difference', function() {
-        expect(types.compare({
-          type: "TypeAtomic",
+        expect(data.compare({
+          type: "DataAtomic",
           name: "Number"
         }, {
-          type: "TypeAtomic",
+          type: "DataAtomic",
           name: "Text"
         })).toBeFalsy();
       });
@@ -161,31 +161,31 @@ describe('data types', function() {
 
     describe('array', function() {
       it('should detect equality', function() {
-        expect(types.compare({
-          type: "TypeArray",
+        expect(data.compare({
+          type: "DataArray",
           element: {
-            type: "TypeAtomic",
+            type: "DataAtomic",
             name: "Boolean"
           }
         }, {
-          type: "TypeArray",
+          type: "DataArray",
           element: {
-            type: "TypeAtomic",
+            type: "DataAtomic",
             name: "Boolean"
           }
         })).toBeTruthy();
       });
       it('should detect difference', function() {
-        expect(types.compare({
-          type: "TypeArray",
+        expect(data.compare({
+          type: "DataArray",
           element: {
-            type: "TypeAtomic",
+            type: "DataAtomic",
             name: "Activation"
           }
         }, {
-          type: "TypeArray",
+          type: "DataArray",
           element: {
-            type: "TypeAtomic",
+            type: "DataAtomic",
             name: "Boolean"
           }
         })).toBeFalsy();
@@ -194,47 +194,47 @@ describe('data types', function() {
 
     describe('function', function() {
       it('should detect equality', function() {
-        expect(types.compare({
-          type: "TypeFunction",
+        expect(data.compare({
+          type: "DataFunction",
           domain: {
-            type: "TypeAtomic",
+            type: "DataAtomic",
             name: "Boolean"
           },
           codomain: {
-            type: "TypeAtomic",
+            type: "DataAtomic",
             name: "Number"
           }
         }, {
-          type: "TypeFunction",
+          type: "DataFunction",
           domain: {
-            type: "TypeAtomic",
+            type: "DataAtomic",
             name: "Boolean"
           },
           codomain: {
-            type: "TypeAtomic",
+            type: "DataAtomic",
             name: "Number"
           }
         })).toBeTruthy();
       });
       it('should detect difference', function() {
-        expect(types.compare({
-          type: "TypeFunction",
+        expect(data.compare({
+          type: "DataFunction",
           domain: {
-            type: "TypeAtomic",
+            type: "DataAtomic",
             name: "Boolean"
           },
           codomain: {
-            type: "TypeAtomic",
+            type: "DataAtomic",
             name: "Number"
           }
         }, {
-          type: "TypeFunction",
+          type: "DataFunction",
           domain: {
-            type: "TypeAtomic",
+            type: "DataAtomic",
             name: "Number"
           },
           codomain: {
-            type: "TypeAtomic",
+            type: "DataAtomic",
             name: "Number"
           }
         })).toBeFalsy();
@@ -243,97 +243,97 @@ describe('data types', function() {
 
     describe('composite', function() {
       it('should detect equality in a simple case', function() {
-        expect(types.compare({
-          type: "TypeComposite",
+        expect(data.compare({
+          type: "DataComposite",
           element: [{
-            type: "TypeCompositeElement",
+            type: "DataCompositeElement",
             key: "ABC",
             value: {
-              type: "TypeAtomic",
+              type: "DataAtomic",
               name: "Number"
             }
           }, {
-            type: "TypeCompositeElement",
+            type: "DataCompositeElement",
             key: "XYZ",
             value: {
-              type: "TypeAtomic",
+              type: "DataAtomic",
               name: "Boolean"
             }
           }]
         }, {
-          type: "TypeComposite",
+          type: "DataComposite",
           element: [{
-            type: "TypeCompositeElement",
+            type: "DataCompositeElement",
             key: "ABC",
             value: {
-              type: "TypeAtomic",
+              type: "DataAtomic",
               name: "Number"
             }
           }, {
-            type: "TypeCompositeElement",
+            type: "DataCompositeElement",
             key: "XYZ",
             value: {
-              type: "TypeAtomic",
+              type: "DataAtomic",
               name: "Boolean"
             }
           }]
         })).toBeTruthy();
       });
       it('should detect equality even if keys are in a different order', function() {
-        expect(types.compare({
-          type: "TypeComposite",
+        expect(data.compare({
+          type: "DataComposite",
           element: [{
-            type: "TypeCompositeElement",
+            type: "DataCompositeElement",
             key: "ABC",
             value: {
-              type: "TypeAtomic",
+              type: "DataAtomic",
               name: "Number"
             }
           }, {
-            type: "TypeCompositeElement",
+            type: "DataCompositeElement",
             key: "XYZ",
             value: {
-              type: "TypeAtomic",
+              type: "DataAtomic",
               name: "Boolean"
             }
           }]
         }, {
-          type: "TypeComposite",
+          type: "DataComposite",
           element: [{
-            type: "TypeCompositeElement",
+            type: "DataCompositeElement",
             key: "XYZ",
             value: {
-              type: "TypeAtomic",
+              type: "DataAtomic",
               name: "Boolean"
             }
           }, {
-            type: "TypeCompositeElement",
+            type: "DataCompositeElement",
             key: "ABC",
             value: {
-              type: "TypeAtomic",
+              type: "DataAtomic",
               name: "Number"
             }
           }]
         })).toBeTruthy();
       });
-      it('should detect difference in types', function() {
-        expect(types.compare({
-          type: "TypeComposite",
+      it('should detect difference in data', function() {
+        expect(data.compare({
+          type: "DataComposite",
           element: [{
-            type: "TypeCompositeElement",
+            type: "DataCompositeElement",
             key: "ABC",
             value: {
-              type: "TypeAtomic",
+              type: "DataAtomic",
               name: "Number"
             }
           }]
         }, {
-          type: "TypeComposite",
+          type: "DataComposite",
           element: [{
-            type: "TypeCompositeElement",
+            type: "DataCompositeElement",
             key: "ABC",
             value: {
-              type: "TypeAtomic",
+              type: "DataAtomic",
               name: "Boolean"
             }
           }]
@@ -341,23 +341,23 @@ describe('data types', function() {
       });
 
       it('should detect difference in keys', function() {
-        expect(types.compare({
-          type: "TypeComposite",
+        expect(data.compare({
+          type: "DataComposite",
           element: [{
-            type: "TypeCompositeElement",
+            type: "DataCompositeElement",
             key: "XYZ",
             value: {
-              type: "TypeAtomic",
+              type: "DataAtomic",
               name: "Boolean"
             }
           }]
         }, {
-          type: "TypeComposite",
+          type: "DataComposite",
           element: [{
-            type: "TypeCompositeElement",
+            type: "DataCompositeElement",
             key: "ABC",
             value: {
-              type: "TypeAtomic",
+              type: "DataAtomic",
               name: "Boolean"
             }
           }]
@@ -374,44 +374,44 @@ describe('data types', function() {
     describe('union', function() {
 
       it('should work in a simple case', function() {
-        expect(types.compute({
-          type: "TypeOperation",
+        expect(data.compute({
+          type: "DataOperation",
           operator: "union",
           operand: [{
-            type: "TypeComposite",
+            type: "DataComposite",
             element: [{
-              type: "TypeCompositeElement",
+              type: "DataCompositeElement",
               key: "ABC",
               value: {
-                type: "TypeAtomic",
+                type: "DataAtomic",
                 name: "Number"
               }
             }]
           }, {
-            type: "TypeComposite",
+            type: "DataComposite",
             element: [{
-              type: "TypeCompositeElement",
+              type: "DataCompositeElement",
               key: "XYZ",
               value: {
-                type: "TypeAtomic",
+                type: "DataAtomic",
                 name: "Boolean"
               }
             }]
           }]
         })).toEqual({
-          type: "TypeComposite",
+          type: "DataComposite",
           element: [{
-            type: "TypeCompositeElement",
+            type: "DataCompositeElement",
             key: "ABC",
             value: {
-              type: "TypeAtomic",
+              type: "DataAtomic",
               name: "Number"
             }
           }, {
-            type: "TypeCompositeElement",
+            type: "DataCompositeElement",
             key: "XYZ",
             value: {
-              type: "TypeAtomic",
+              type: "DataAtomic",
               name: "Boolean"
             }
           }]
@@ -419,96 +419,96 @@ describe('data types', function() {
       });
 
       it('should output a composite type where keys are sorted lexicographically', function() {
-        expect(types.compute({
-          type: "TypeOperation",
+        expect(data.compute({
+          type: "DataOperation",
           operator: "union",
           operand: [{
-            type: "TypeComposite",
+            type: "DataComposite",
             element: [{
-              type: "TypeCompositeElement",
+              type: "DataCompositeElement",
               key: "XYZ",
               value: {
-                type: "TypeAtomic",
+                type: "DataAtomic",
                 name: "Boolean"
               }
             }]
           }, {
-            type: "TypeComposite",
+            type: "DataComposite",
             element: [{
-              type: "TypeCompositeElement",
+              type: "DataCompositeElement",
               key: "ABC",
               value: {
-                type: "TypeAtomic",
+                type: "DataAtomic",
                 name: "Number"
               }
             }]
           }]
         })).toEqual({
-          type: "TypeComposite",
+          type: "DataComposite",
           element: [{
-            type: "TypeCompositeElement",
+            type: "DataCompositeElement",
             key: "ABC",
             value: {
-              type: "TypeAtomic",
+              type: "DataAtomic",
               name: "Number"
             }
           }, {
-            type: "TypeCompositeElement",
+            type: "DataCompositeElement",
             key: "XYZ",
             value: {
-              type: "TypeAtomic",
+              type: "DataAtomic",
               name: "Boolean"
             }
           }]
         });
       });
 
-      it('should pick elements from the first operand when operands have identical keys with different types', function() {
-        expect(types.compute({
-          type: "TypeOperation",
+      it('should pick elements from the first operand when operands have identical keys with different data', function() {
+        expect(data.compute({
+          type: "DataOperation",
           operator: "union",
           operand: [{
-            type: "TypeComposite",
+            type: "DataComposite",
             element: [{
-              type: "TypeCompositeElement",
+              type: "DataCompositeElement",
               key: "XYZ",
               value: {
-                type: "TypeAtomic",
+                type: "DataAtomic",
                 name: "Boolean"
               }
             }]
           }, {
-            type: "TypeComposite",
+            type: "DataComposite",
             element: [{
-              type: "TypeCompositeElement",
+              type: "DataCompositeElement",
               key: "XYZ",
               value: {
-                type: "TypeAtomic",
+                type: "DataAtomic",
                 name: "Text"
               }
             }, {
-              type: "TypeCompositeElement",
+              type: "DataCompositeElement",
               key: "ABC",
               value: {
-                type: "TypeAtomic",
+                type: "DataAtomic",
                 name: "Number"
               }
             }]
           }]
         })).toEqual({
-          type: "TypeComposite",
+          type: "DataComposite",
           element: [{
-            type: "TypeCompositeElement",
+            type: "DataCompositeElement",
             key: "ABC",
             value: {
-              type: "TypeAtomic",
+              type: "DataAtomic",
               name: "Number"
             }
           }, {
-            type: "TypeCompositeElement",
+            type: "DataCompositeElement",
             key: "XYZ",
             value: {
-              type: "TypeAtomic",
+              type: "DataAtomic",
               name: "Boolean"
             }
           }]
@@ -521,45 +521,45 @@ describe('data types', function() {
     describe('intersection', function() {
 
       it('should work in a simple case', function() {
-        expect(types.compute({
-          type: "TypeOperation",
+        expect(data.compute({
+          type: "DataOperation",
           operator: "intersection",
           operand: [{
-            type: "TypeComposite",
+            type: "DataComposite",
             element: [{
-              type: "TypeCompositeElement",
+              type: "DataCompositeElement",
               key: "ABC",
               value: {
-                type: "TypeAtomic",
+                type: "DataAtomic",
                 name: "Number"
               }
             }]
           }, {
-            type: "TypeComposite",
+            type: "DataComposite",
             element: [{
-              type: "TypeCompositeElement",
+              type: "DataCompositeElement",
               key: "ABC",
               value: {
-                type: "TypeAtomic",
+                type: "DataAtomic",
                 name: "Number"
               }
             },
             {
-              type: "TypeCompositeElement",
+              type: "DataCompositeElement",
               key: "XYZ",
               value: {
-                type: "TypeAtomic",
+                type: "DataAtomic",
                 name: "Boolean"
               }
             }]
           }]
         })).toEqual({
-          type: "TypeComposite",
+          type: "DataComposite",
           element: [{
-            type: "TypeCompositeElement",
+            type: "DataCompositeElement",
             key: "ABC",
             value: {
-              type: "TypeAtomic",
+              type: "DataAtomic",
               name: "Number"
             }
           }]
@@ -567,96 +567,96 @@ describe('data types', function() {
       });
 
       it('should output a composite type where keys are sorted lexicographically', function() {
-        expect(types.compute({
-          type: "TypeOperation",
+        expect(data.compute({
+          type: "DataOperation",
           operator: "union",
           operand: [{
-            type: "TypeComposite",
+            type: "DataComposite",
             element: [{
-              type: "TypeCompositeElement",
+              type: "DataCompositeElement",
               key: "XYZ",
               value: {
-                type: "TypeAtomic",
+                type: "DataAtomic",
                 name: "Boolean"
               }
             }]
           }, {
-            type: "TypeComposite",
+            type: "DataComposite",
             element: [{
-              type: "TypeCompositeElement",
+              type: "DataCompositeElement",
               key: "ABC",
               value: {
-                type: "TypeAtomic",
+                type: "DataAtomic",
                 name: "Number"
               }
             }]
           }]
         })).toEqual({
-          type: "TypeComposite",
+          type: "DataComposite",
           element: [{
-            type: "TypeCompositeElement",
+            type: "DataCompositeElement",
             key: "ABC",
             value: {
-              type: "TypeAtomic",
+              type: "DataAtomic",
               name: "Number"
             }
           }, {
-            type: "TypeCompositeElement",
+            type: "DataCompositeElement",
             key: "XYZ",
             value: {
-              type: "TypeAtomic",
+              type: "DataAtomic",
               name: "Boolean"
             }
           }]
         });
       });
 
-      it('should pick elements from the first operand when operands have identical keys with different types', function() {
-        expect(types.compute({
-          type: "TypeOperation",
+      it('should pick elements from the first operand when operands have identical keys with different data', function() {
+        expect(data.compute({
+          type: "DataOperation",
           operator: "union",
           operand: [{
-            type: "TypeComposite",
+            type: "DataComposite",
             element: [{
-              type: "TypeCompositeElement",
+              type: "DataCompositeElement",
               key: "XYZ",
               value: {
-                type: "TypeAtomic",
+                type: "DataAtomic",
                 name: "Boolean"
               }
             }]
           }, {
-            type: "TypeComposite",
+            type: "DataComposite",
             element: [{
-              type: "TypeCompositeElement",
+              type: "DataCompositeElement",
               key: "XYZ",
               value: {
-                type: "TypeAtomic",
+                type: "DataAtomic",
                 name: "Text"
               }
             }, {
-              type: "TypeCompositeElement",
+              type: "DataCompositeElement",
               key: "ABC",
               value: {
-                type: "TypeAtomic",
+                type: "DataAtomic",
                 name: "Number"
               }
             }]
           }]
         })).toEqual({
-          type: "TypeComposite",
+          type: "DataComposite",
           element: [{
-            type: "TypeCompositeElement",
+            type: "DataCompositeElement",
             key: "ABC",
             value: {
-              type: "TypeAtomic",
+              type: "DataAtomic",
               name: "Number"
             }
           }, {
-            type: "TypeCompositeElement",
+            type: "DataCompositeElement",
             key: "XYZ",
             value: {
-              type: "TypeAtomic",
+              type: "DataAtomic",
               name: "Boolean"
             }
           }]
