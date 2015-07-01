@@ -73,11 +73,11 @@ var computeData = function(theData) {
         if(_.every(theData.operand,"type","DataComposite")) {
           return {
             type:"DataComposite",
-            element:_.sortBy(_.unique(_.intersection.apply(null,_.map(theData.operand,"element")),"key"),"key")
+            element:_.sortBy(_.unique(_.intersectionObjects.apply(null,_.map(theData.operand,"element")),"key"),"key")
           };
         }
         else {
-          throw new Error("Arguments of the union data operator can only be composite data");
+          throw new Error("Arguments of the intersection data operator can only be composite data");
         }
         break;
       case 'complement':

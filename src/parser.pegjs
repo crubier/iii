@@ -56,9 +56,7 @@
 //TODO
 
 start
-/*= _ interface _*/
 = _ definitions:definitions _ {return definitions;}
-
 
 definitions 'a list of definitions'
 = _ content:content* _ {return flatten(content);}
@@ -97,6 +95,10 @@ interfaceAtomic 'the specification of an atomic interface'
 interfaceComposite 'the specification of a composite interface'
 = '{' _ first:(key:keyIdentifier _ ':' _ value:interface {return {type:'InterfaceCompositeElement',key:key,value:value}}) _ rest:(',' _ content:(key:keyIdentifier _ ':' _ value:interface {return {type:'InterfaceCompositeElement',key:key,value:value}}) _ {return content;})* '}' {return {type:'InterfaceComposite',element:mergeElements(first,rest)};}
 
+////////////////////////////////////////////////////////////////////////////////
+// Direction
+direction 'the direction of a data flow'
+= 'out' / 'in' / 'ref'
 
 ////////////////////////////////////////////////////////////////////////////////
 // Data Types specifications
@@ -123,16 +125,10 @@ dataFunction 'the specification of a function type'
 = '(' _ domain:data _ ('→'/'->') _ codomain:data _')'{return {type:'DataFunction',domain:domain,codomain:codomain};}
 
 ////////////////////////////////////////////////////////////////////////////////
-// Direction
-direction 'the direction of a data flow'
-= 'out' / 'in' / 'ref'
-
-////////////////////////////////////////////////////////////////////////////////
 // Interaction
 interaction 'an interaction'
 = '(' elements:interactionElement* _ ')' {var temp=  mergeExpression(elements);return {type:'ExpressionSimple',operator:temp.operator,operand:temp.operand};}
 / '(js`' val:[^`]* '`)'  {return {type:'ExpressionJavascript',native:esprima.parse(val.join(''))};}
-
 
 interactionElement 'an interaction element'
 = _ operand:interaction {return {operand:operand};}

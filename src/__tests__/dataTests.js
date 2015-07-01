@@ -1,7 +1,7 @@
-jest.dontMock('../data').dontMock('lodash');
+jest.dontMock('../data.js').dontMock('lodash');
 
-describe.('data data', function() {
-  var data = require('../data');
+describe('data data', function() {
+  var data = require('../data.js');
 
 
   describe('validation', function() {
@@ -664,8 +664,6 @@ describe.('data data', function() {
       });
 
     });
-
-
 
   });
 });
