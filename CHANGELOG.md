@@ -33,3 +33,7 @@
 # 0.0.8
 
 - Fixes
+
+# 0.0.9
+
+- Added iii.interfaces.listOfAtoms()

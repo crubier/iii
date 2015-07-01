@@ -1,6 +1,6 @@
 jest.dontMock('../data').dontMock('lodash');
 
-describe('data data', function() {
+describe.('data data', function() {
   var data = require('../data');
 
 

@@ -1,4 +1,19 @@
-jest.dontMock('../interfaces').dontMock('lodash');
+jest.dontMock('../interfaces.js').dontMock('../../dist/parser.js').dontMock('lodash');
+
+var interfaces= require('../interfaces.js');
+var parser = require('../../dist/parser.js');
+
+describe.only('interfaces', function() {
+  it('atomic', function() {
+  var code = "Number in";
+  expect(interfaces.listOfAtoms(
+    parser.parse(code,{startRule:"interface"}),"main")
+    ).toEqual(
+      [{name:"main",data:{type:"DataAtomic",name:"Number"},direction:"in"}]
+    );
+});
+});
+
 //TODO Upgrade
 // describe('interfaces', function() {
 //   var interfaces = require('../interfaces');

@@ -133,8 +133,25 @@ var globalisationInterface = function(theInterface) {
   }
 };
 
+function listOfAtomicInterfaces(theInterface,prefix) {
+  switch (theInterface.type) {
+    case "InterfaceAtomic":
+      return [{name:prefix,data:theInterface.data,direction:theInterface.direction}];
+    case "InterfaceComposite":
+      var res = [];
+      var i = 0;
+      for(i=0;i<theInterface.element.length;i++){
+        res = _.union(res,listOfAtomicInterfaces(theInterface.element[i].value,prefix+"."+theInterface.element[i].key));
+      }
+      return res;
+    default:
+      throw "Trying to get the globalisation of something which is not an interface";
+  }
+}
+
 
 
 module.exports = {
-  conjugate:conjugateInterface
+  conjugate:conjugateInterface,
+  listOfAtoms:listOfAtomicInterfaces
 };
