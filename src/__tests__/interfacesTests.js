@@ -1,7 +1,7 @@
-jest.dontMock('../interfaces.js').dontMock('../../dist/parser.js').dontMock('lodash');
+jest.dontMock('../interfaces.js').dontMock('../parser.js').dontMock('lodash');
 
 var interfaces = require('../interfaces.js');
-var parser = require('../../dist/parser.js');
+var parser = require('../parser.js');
 
 describe('interfaces', function() {
   var interfaces = require('../interfaces');
