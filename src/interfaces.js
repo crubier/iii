@@ -145,7 +145,7 @@ function listOfAtoms(theInterface,prefix) {
       }
       return res;
     default:
-      throw "Trying to get the globalisation of something which is not an interface";
+      throw "Trying to get the list of atomic interfaces of something which is not an interface";
   }
 }
 
