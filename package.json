@@ -33,11 +33,11 @@
   "dependencies": {
     "async": "^0.9.0",
     "chalk": "^0.5.1",
-    "hexastore": "^0.1.4",
-    "lodash": "^3.9.3",
-    "minimist": "^1.1.0",
     "escodegen": "^1.4.3",
-    "esprima": "^2.1.0"
+    "esprima": "^2.1.0",
+    "factis": "^1.0.3",
+    "lodash": "^3.9.3",
+    "minimist": "^1.1.0"
   },
   "devDependencies": {
     "chai": "^1.10.0",
@@ -57,8 +57,8 @@
   "jest": {
     "collectCoverage": true,
     "testPathIgnorePatterns": [
-    "node_modules",
-    "src"
-]
+      "node_modules",
+      "src"
+    ]
   }
 }
