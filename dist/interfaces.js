@@ -140,12 +140,13 @@ function listOfAtoms(theInterface,prefix) {
     case "InterfaceComposite":
       var res = [];
       var i = 0;
+      // TODO Clean that, make it functional
       for(i=0;i<theInterface.element.length;i++){
         res = _.union(res,listOfAtoms(theInterface.element[i].value,prefix+"."+theInterface.element[i].key));
       }
       return res;
     default:
-      throw "Trying to get the globalisation of something which is not an interface";
+      throw "Trying to get the list of atomic interfaces of something which is not an interface";
   }
 }
 

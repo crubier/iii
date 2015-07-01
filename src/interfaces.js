@@ -140,6 +140,7 @@ function listOfAtoms(theInterface,prefix) {
     case "InterfaceComposite":
       var res = [];
       var i = 0;
+      // TODO Clean that, make it functional
       for(i=0;i<theInterface.element.length;i++){
         res = _.union(res,listOfAtoms(theInterface.element[i].value,prefix+"."+theInterface.element[i].key));
       }
