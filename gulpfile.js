@@ -6,7 +6,7 @@ var del   = require('del');
 var jest = require('gulp-jest');
 
 gulp.task('jest',['dist'], function () {
-    return gulp.src('dist/__tests__').pipe(jest({
+    return gulp.src('./').pipe(jest({
         // scriptPreprocessor: "./spec/support/preprocessor.js",
         unmockedModulePathPatterns: [
             "node_modules/react"
@@ -14,7 +14,7 @@ gulp.task('jest',['dist'], function () {
         // testDirectoryName: "spec",
         testPathIgnorePatterns: [
             "node_modules",
-            "spec/support"
+            "src"
         ],
         moduleFileExtensions: [
             "js",

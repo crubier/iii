@@ -133,7 +133,7 @@ var globalisationInterface = function(theInterface) {
   }
 };
 
-function listOfAtomicInterfaces(theInterface,prefix) {
+function listOfAtoms(theInterface,prefix) {
   switch (theInterface.type) {
     case "InterfaceAtomic":
       return [{name:prefix,data:theInterface.data,direction:theInterface.direction}];
@@ -141,7 +141,7 @@ function listOfAtomicInterfaces(theInterface,prefix) {
       var res = [];
       var i = 0;
       for(i=0;i<theInterface.element.length;i++){
-        res = _.union(res,listOfAtomicInterfaces(theInterface.element[i].value,prefix+"."+theInterface.element[i].key));
+        res = _.union(res,listOfAtoms(theInterface.element[i].value,prefix+"."+theInterface.element[i].key));
       }
       return res;
     default:
@@ -153,5 +153,5 @@ function listOfAtomicInterfaces(theInterface,prefix) {
 
 module.exports = {
   conjugate:conjugateInterface,
-  listOfAtoms:listOfAtomicInterfaces
+  listOfAtoms:listOfAtoms
 };

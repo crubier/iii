@@ -55,6 +55,10 @@
     "pegjs": "^0.8.0"
   },
   "jest": {
-    "collectCoverage": true
+    "collectCoverage": true,
+    "testPathIgnorePatterns": [
+    "node_modules",
+    "src"
+]
   }
 }

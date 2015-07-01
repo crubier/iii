@@ -1,6 +1,6 @@
 jest.dontMock('../interfaces.js').dontMock('../../dist/parser.js').dontMock('lodash');
 
-var interfaces= require('../interfaces.js');
+var interfaces = require('../interfaces.js');
 var parser = require('../../dist/parser.js');
 
 describe('interfaces', function() {
@@ -82,13 +82,44 @@ describe('interfaces', function() {
 
   });
 
-  it('atom list', function() {
-  var code = "Number in";
-  expect(interfaces.listOfAtoms(
-    parser.parse(code,{startRule:"interface"}),"main")
-    ).toEqual(
-      [{name:"main",data:{type:"DataAtomic",name:"Number"},direction:"in"}]
-    );
-});
+  describe('atom list', function() {
+    it('simple', function() {
+      expect(interfaces.listOfAtoms(
+        parser.parse("Number in", {startRule: "interface"}), "main")).toEqual(
+        [{
+          name: "main",
+          data: {
+            type: "DataAtomic",
+            name: "Number"
+          },
+          direction: "in"
+        }]
+      );
+    });
+
+
+
+    it('composite', function() {
+      expect(interfaces.listOfAtoms(
+        parser.parse("{x:Number in,y:Number out}", {startRule: "interface"}), "main")).toEqual(
+        [{
+          name: "main.x",
+          data: {
+            type: "DataAtomic",
+            name: "Number"
+          },
+          direction: "in"
+        },
+      {
+        name: "main.y",
+        data: {
+          type: "DataAtomic",
+          name: "Number"
+        },
+        direction: "out"
+      }]
+      );
+    });
+  });
 
 });
