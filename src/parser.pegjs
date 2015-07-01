@@ -127,8 +127,8 @@ dataFunction 'the specification of a function type'
 ////////////////////////////////////////////////////////////////////////////////
 // Interaction
 interaction 'an interaction'
-= '(' elements:interactionElement* _ ')' {var temp=  mergeExpression(elements);return {type:'ExpressionSimple',operator:temp.operator,operand:temp.operand};}
-/ '(js`' val:[^`]* '`)'  {return {type:'ExpressionJavascript',native:esprima.parse(val.join(''))};}
+= '(' elements:interactionElement* _ ')' {var temp=  mergeExpression(elements);return {type:'InteractionSimple',operator:temp.operator,operand:temp.operand};}
+/ '(js`' val:[^`]* '`)'  {return {type:'InteractionJavascript',native:esprima.parse(val.join(''))};}
 
 interactionElement 'an interaction element'
 = _ operand:interaction {return {operand:operand};}
