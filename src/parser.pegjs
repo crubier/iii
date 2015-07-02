@@ -58,23 +58,30 @@
 start
 = _ definitions:definitions _ {return definitions;}
 
-definitions 'a list of definitions'
+interactionDefinition 'a list of definitions'
 = _ content:content* _ {return flatten(content);}
 
 content 'a definition or an import statement'
 = _ definition:definition {return [definition];}
 / _ 'import' _ package:[^`]* _ {return parse(fs.readFileSync(filename.join(''),{encoding:'utf8'}));}
 
-definition 'an interaction definition'
-= _ 'interaction' _ signature:signature  _ definitions:(_ 'with' _ definitions:definitions {return definitions;})? _'is' _ interaction:interaction  _{ return {type:'Definition',interaction:interaction,signature:signature,definitions:(definitions===null?[]:definitions)};}
+interactionDefinition 'an interaction definition'
+= _ 'interaction' _ signature:interactionSignature  _ definitions:(_ 'with' _ definitions:interactionDefinition {return definitions;})? _'is' _ interaction:interaction  _{ return {type:'Definition',interaction:interaction,signature:signature,definitions:(definitions===null?[]:definitions)};}
 
-signature 'an interaction signature specification'
-= '('  elements:signatureElement* _ ')' _ ':' _ interface:interface { var temp = mergeSignature(elements);return {type:'Signature',interface:interface,operator:temp.operator,operand:temp.operand};}
+interactionSignature 'an interaction interactionSignature specification'
+= '('  elements:interactionSignatureElement* _ ')' _ ':' _ interface:interface { var temp = mergeSignature(elements);return {type:'Signature',interface:interface,operator:temp.operator,operand:temp.operand};}
 
-signatureElement 'a signature element'
+interactionSignatureElement 'a interactionSignature element'
 = _ operator:operatorIdentifier {return {operator:operator};}
 / _ '(' _ name:variableIdentifier _':'_ interface:interface _ ')' {return {operand:{interface:interface,name:name}};}
 
+interaction 'an interaction'
+= '(js`' val:[^`]* '`)'  {return {type:'InteractionJavascript',native:esprima.parse(val.join(''))};}
+/ '(' elements:interactionElement* _ ')' {var temp=  mergeExpression(elements);return {type:'InteractionSimple',operator:temp.operator,operand:temp.operand};}
+
+interactionElement 'an interaction element'
+= _ operand:interaction {return {operand:operand};}
+/ _ operator:operatorIdentifier {return {operator:operator};}
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -95,8 +102,6 @@ interfaceAtomic 'the specification of an atomic interface'
 interfaceComposite 'the specification of a composite interface'
 = '{' _ first:(key:keyIdentifier _ ':' _ value:interface {return {type:'InterfaceCompositeElement',key:key,value:value}}) _ rest:(',' _ content:(key:keyIdentifier _ ':' _ value:interface {return {type:'InterfaceCompositeElement',key:key,value:value}}) _ {return content;})* '}' {return {type:'InterfaceComposite',element:mergeElements(first,rest)};}
 
-////////////////////////////////////////////////////////////////////////////////
-// Direction
 direction 'the direction of a data flow'
 = 'out' / 'in' / 'ref'
 
@@ -124,15 +129,6 @@ dataArray 'the specification of an array type'
 dataFunction 'the specification of a function type'
 = '(' _ domain:data _ ('→'/'->') _ codomain:data _')'{return {type:'DataFunction',domain:domain,codomain:codomain};}
 
-////////////////////////////////////////////////////////////////////////////////
-// Interaction
-interaction 'an interaction'
-= '(' elements:interactionElement* _ ')' {var temp=  mergeExpression(elements);return {type:'InteractionSimple',operator:temp.operator,operand:temp.operand};}
-/ '(js`' val:[^`]* '`)'  {return {type:'InteractionJavascript',native:esprima.parse(val.join(''))};}
-
-interactionElement 'an interaction element'
-= _ operand:interaction {return {operand:operand};}
-/ _ operator:operatorIdentifier {return {operator:operator};}
 
 
 ////////////////////////////////////////////////////////////////////////////////
