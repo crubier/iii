@@ -29,24 +29,57 @@ function findMatchingDefinition(interaction, interactionDefinitionList) {
       interactionDefinitionList[0](interaction.operator);
     }
   }
-
 }
 
-
-function isOnlyMadeOfBaseInteractions(interaction) {
-  if(!isBaseInteraction(interaction)) {
-    return false;
+// Compare two interaction, return 0 if they are equal
+function compare(a, b) {
+  if (a.operator > b.operator) {
+    return 1;
   } else {
-    var i;
-    for(i=0;i<interaction.operand.length;i++) {
-      if(!isOnlyMadeOfBaseInteractions(interaction.operand[i])) {
-        return false;
+    if (a.operator < b.operator) {
+      return -1;
+    } else {
+      if ((a.operand.length - b.operand.length) !== 0) {
+        return (a.operand.length - b.operand.length);
+      } else {
+        var x = _.zip(a.operand, b.operand);
+        var f = _.spread(compare);
+        for (var i = 0; i < x.length; i++) {
+          var res = f(x[i]);
+          if (res !== 0) return res;
+        }
+        return 0;
       }
     }
-    return true;
   }
 }
 
+// Substitute a target interaction with another one in an interaction expression
+
+function substituteInInteraction(theInteraction, target, substitute) {
+  if (compare(theInteraction, target) === 0) {
+    return _.cloneDeep(substitute);
+  } else {
+    return {
+      type: theInteraction.type,
+      operator: theInteraction.operator,
+      operand: _.map(theInteraction.operand, function(x) {
+        return substituteInInteraction(x, target, substitute);
+      })
+    };
+  }
+}
+
+// Checks if a given interaction is made of only base interactions
+function isOnlyMadeOfBaseInteractions(interaction) {
+  if (!isBaseInteraction(interaction)) {
+    return false;
+  } else {
+    return _.every(interaction.operand, isOnlyMadeOfBaseInteractions);
+  }
+}
+
+// Checks if a given interaction is a base interaction
 function isBaseInteraction(interaction) {
   var theOperator = operator.parse(interaction.operator);
   switch (theOperator) {
@@ -59,7 +92,7 @@ function isBaseInteraction(interaction) {
     case "Custom":
       return false;
     default:
-      throw new Error ('problem parsing interaction operator '+theOperator);
+      throw new Error('problem parsing interaction operator ' + theOperator);
   }
 }
 
@@ -68,3 +101,5 @@ function isBaseInteraction(interaction) {
 module.exports.listOfInteractions = listOfInteractions;
 module.exports.isBaseInteraction = isBaseInteraction;
 module.exports.isOnlyMadeOfBaseInteractions = isOnlyMadeOfBaseInteractions;
+module.exports.compare = compare;
+module.exports.substituteInInteraction = substituteInInteraction;

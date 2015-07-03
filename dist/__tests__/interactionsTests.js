@@ -86,4 +86,62 @@ describe('interactions', function() {
     });
 
   });
+
+
+
+
+  describe('compare', function() {
+
+    it('case 1', function() {
+      expect(interactions.compare(
+        parser.parse("(previous(#))", {
+          startRule: "interaction"
+        }),
+        parser.parse("(previous(#))", {
+          startRule: "interaction"
+        })) === 0).toBeTruthy();
+    });
+
+    it('case 2', function() {
+      expect(interactions.compare(
+        parser.parse("(previous(#))", {
+          startRule: "interaction"
+        }),
+        parser.parse("(previous(#lol))", {
+          startRule: "interaction"
+        })) !== 0).toBeTruthy();
+    });
+
+    it('case 3', function() {
+      expect(interactions.compare(
+        parser.parse("(previous(#(5)(6)))", {
+          startRule: "interaction"
+        }),
+        parser.parse("(previous(#(5)(7)))", {
+          startRule: "interaction"
+        })) !== 0).toBeTruthy();
+    });
+
+    it('case 4', function() {
+      expect(interactions.compare(
+        parser.parse("(previous(#(5)(6)))", {
+          startRule: "interaction"
+        }),
+        parser.parse("(precious(#(5)(7)))", {
+          startRule: "interaction"
+        })) !== 0).toBeTruthy();
+    });
+
+
+  });
+
+
+
+  describe('substitute in interaction', function() {
+
+  //TODO
+
+
+  });
+
 });
