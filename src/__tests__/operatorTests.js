@@ -102,7 +102,6 @@ describe('operator', function() {
       expect(operator.parse("$pouf")).toEqual("Custom");
     });
 
-
     it('should detect case 4', function() {
       expect(operator.parse("$$$w$o$$widei\"\"d$$loliel$$")).toEqual("Custom");
     });

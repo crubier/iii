@@ -55,6 +55,10 @@
 start
 = composition / selection / previous / identifier / functionApplication / custom
 
+
+
+
+
 composition 'a composition interaction'
 = _ '{' _ (key:keyIdentifier _':'_'$'_ (',' _)? )* '}' _ {return "Composition";}
 

@@ -83,30 +83,29 @@ describe('operator', function() {
 
   describe('custom', function() {
 
-  it('should detect case 1', function() {
-    expect(operator.parse("wow")).toEqual("Custom");
+    it('should detect case 1', function() {
+      expect(operator.parse("wow")).toEqual("Custom");
+    });
+
+
+    it('should detect case 2', function() {
+      expect(operator.parse("$pif$")).toEqual("Custom");
+    });
+
+
+    it('should detect case 3', function() {
+      expect(operator.parse("paf$")).toEqual("Custom");
+    });
+
+
+    it('should detect case 4', function() {
+      expect(operator.parse("$pouf")).toEqual("Custom");
+    });
+
+    it('should detect case 4', function() {
+      expect(operator.parse("$$$w$o$$widei\"\"d$$loliel$$")).toEqual("Custom");
+    });
+
   });
-
-
-  it('should detect case 2', function() {
-    expect(operator.parse("$pif$")).toEqual("Custom");
-  });
-
-
-  it('should detect case 3', function() {
-    expect(operator.parse("paf$")).toEqual("Custom");
-  });
-
-
-  it('should detect case 4', function() {
-    expect(operator.parse("$pouf")).toEqual("Custom");
-  });
-
-
-it('should detect case 4', function() {
-  expect(operator.parse("$$$w$o$$widei\"\"d$$loliel$$")).toEqual("Custom");
-});
-
-});
 
 });
