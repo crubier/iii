@@ -58,15 +58,15 @@
 start
 = _ definitions:definitions _ {return definitions;}
 
-interactionDefinition 'a list of definitions'
+definitions 'a list of definitions'
 = _ content:content* _ {return flatten(content);}
 
 content 'a definition or an import statement'
-= _ definition:definition {return [definition];}
+= _ definition:interactionDefinition {return [definition];}
 / _ 'import' _ package:[^`]* _ {return parse(fs.readFileSync(filename.join(''),{encoding:'utf8'}));}
 
 interactionDefinition 'an interaction definition'
-= _ 'interaction' _ signature:interactionSignature  _ definitions:(_ 'with' _ definitions:interactionDefinition {return definitions;})? _'is' _ interaction:interaction  _{ return {type:'Definition',interaction:interaction,signature:signature,definitions:(definitions===null?[]:definitions)};}
+= _ 'interaction' _ signature:interactionSignature  _ definitions:(_ 'with' _ definitions:definitions {return definitions;})? _'is' _ interaction:interaction  _{ return {type:'Definition',interaction:interaction,signature:signature,definitions:(definitions===null?[]:definitions)};}
 
 interactionSignature 'an interaction interactionSignature specification'
 = '('  elements:interactionSignatureElement* _ ')' _ ':' _ interface:interface { var temp = mergeSignature(elements);return {type:'Signature',interface:interface,operator:temp.operator,operand:temp.operand};}
@@ -147,7 +147,7 @@ variableIdentifier 'a variable identifier'
 = first:[a-z] rest:[a-zA-Z0-9]* { return mergeElements(first,rest).join(''); }
 
 keyIdentifier 'a key identifier'
-= first:[a-z] rest:[a-zA-Z0-9]* { return mergeElements(first,rest).join(''); }
+= first:[a-z0-9] rest:[a-zA-Z0-9]* { return mergeElements(first,rest).join(''); }
 
 _ 'white space'
 = [ \t\r\n]*
