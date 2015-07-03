@@ -58,7 +58,7 @@ module.exports = (function() {
         peg$c23 = { type: "other", description: "an identifier interaction" },
         peg$c24 = "#",
         peg$c25 = { type: "literal", value: "#", description: "\"#\"" },
-        peg$c26 = function(identifier) {return "Identifier";},
+        peg$c26 = function() {return "Identifier";},
         peg$c27 = { type: "other", description: "a function application interaction" },
         peg$c28 = "in",
         peg$c29 = { type: "literal", value: "in", description: "\"in\"" },
@@ -665,6 +665,9 @@ module.exports = (function() {
           s3 = peg$parse_();
           if (s3 !== peg$FAILED) {
             s4 = peg$parseoperatorIdentifier();
+            if (s4 === peg$FAILED) {
+              s4 = peg$c9;
+            }
             if (s4 !== peg$FAILED) {
               s5 = peg$parse_();
               if (s5 !== peg$FAILED) {
@@ -690,7 +693,7 @@ module.exports = (function() {
                   s7 = peg$parse_();
                   if (s7 !== peg$FAILED) {
                     peg$reportedPos = s0;
-                    s1 = peg$c26(s4);
+                    s1 = peg$c26();
                     s0 = s1;
                   } else {
                     peg$currPos = s0;

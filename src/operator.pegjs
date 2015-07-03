@@ -65,7 +65,7 @@ previous 'a previous interaction'
 = _ 'previous' _ '$' _ {return "Previous";}
 
 identifier 'an identifier interaction'
-= _ '#' _ identifier:operatorIdentifier _ ('$')* _ {return "Identifier";}
+= _ '#' _ (identifier:operatorIdentifier)? _ ('$')* _ {return "Identifier";}
 
 functionApplication 'a function application interaction'
 = _ '$' _ 'in' _ '$' _ '$' _ '=' _ '$' _ {return "FunctionApplication";}
