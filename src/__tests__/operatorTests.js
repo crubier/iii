@@ -2,7 +2,7 @@ jest.dontMock('../operator.js').dontMock('../parser.js').dontMock('lodash');
 
 
 var operator = require('../operator.js');
-// var parser = require('../parser.js');
+var parser = require('../parser.js');
 var _ = require('lodash');
 
 
@@ -106,6 +106,12 @@ describe('operator', function() {
       expect(operator.parse("$$$w$o$$widei\"\"d$$loliel$$")).toEqual("Custom");
     });
 
+  });
+
+  describe('with parsed interaction', function() {
+    it('should work on a parsed interaction', function() {
+      expect(operator.parse(parser.parse("(wow(5)lolie(6))", {startRule: "interaction"}).operator)).toEqual("Custom");
+    });
   });
 
 });

@@ -1,4 +1,4 @@
-jest.dontMock('../interactions.js').dontMock('../parser.js').dontMock('lodash');
+jest.dontMock('../interactions.js').dontMock('../parser.js').dontMock('../operator.js').dontMock('lodash');
 
 
 
@@ -27,5 +27,63 @@ describe('interactions', function() {
         _.sortBy(["x", "y", "5", "$+$", "{a:$,b:$}"])
       );
     });
+  });
+
+  describe('is base interaction', function() {
+
+    it('simple', function() {
+      // console.log(JSON.stringify(parser.parse("(previous(q))", {startRule: "interaction"}).operator));
+
+      expect(interactions.isBaseInteraction(
+        parser.parse("(previous(q))", {
+          startRule: "interaction"
+        }))).toEqual(
+        true
+      );
+    });
+
+  });
+
+  describe('is made of base interactions', function() {
+
+    it('case 1', function() {
+
+      expect(interactions.isOnlyMadeOfBaseInteractions(
+        parser.parse("(previous(#))", {
+          startRule: "interaction"
+        }))).toEqual(
+        true
+      );
+    });
+
+    it('case 2 with the custom interaction (5)', function() {
+
+      expect(interactions.isOnlyMadeOfBaseInteractions(
+        parser.parse("(previous(#(5)))", {
+          startRule: "interaction"
+        }))).toEqual(
+        false
+      );
+    });
+
+    it('case 3', function() {
+      expect(interactions.isOnlyMadeOfBaseInteractions(
+        parser.parse("(previous(#(#5)))", {
+          startRule: "interaction"
+        }))).toEqual(
+        true
+      );
+    });
+
+
+    it('case 4 with all base interactions', function() {
+      expect(interactions.isOnlyMadeOfBaseInteractions(
+        parser.parse("({a:(previous(#(#5)))b:((#d).xys)c:((#2)in(#5)(#2)=(#(#5)))})", {
+          startRule: "interaction"
+        }))).toEqual(
+        true
+      );
+    });
+
   });
 });

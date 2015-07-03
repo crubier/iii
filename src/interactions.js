@@ -32,9 +32,25 @@ function findMatchingDefinition(interaction, interactionDefinitionList) {
 
 }
 
+// Checks if a given interaction is made of only base interactions
+function isOnlyMadeOfBaseInteractions(interaction) {
+  if(!isBaseInteraction(interaction)) {
+    return false;
+  } else {
+    var i;
+    for(i=0;i<interaction.operand.length;i++) {
+      if(!isOnlyMadeOfBaseInteractions(interaction.operand[i])) {
+        return false;
+      }
+    }
+    return true;
+  }
+}
 
+// Checks if a given interaction is a base interaction
 function isBaseInteraction(interaction) {
-  switch (operator.parse(interaction.operator)) {
+  var theOperator = operator.parse(interaction.operator);
+  switch (theOperator) {
     case "Composition":
     case "Selection":
     case "Previous":
@@ -44,10 +60,12 @@ function isBaseInteraction(interaction) {
     case "Custom":
       return false;
     default:
-      throw new Error ('problem parsing interaction');
+      throw new Error ('problem parsing interaction operator '+theOperator);
   }
 }
 
 
 
 module.exports.listOfInteractions = listOfInteractions;
+module.exports.isBaseInteraction = isBaseInteraction;
+module.exports.isOnlyMadeOfBaseInteractions = isOnlyMadeOfBaseInteractions;
