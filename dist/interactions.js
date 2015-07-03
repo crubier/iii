@@ -15,9 +15,36 @@ function listOfInteractions(theInteraction) {
   }
 }
 
-// instantiate an interaction definition (expand this interaction) in an interaction expression
-function instantiate(interactionDefinition,interaction) {
-  //TODO
+// instantiate an interaction (expand this interaction) using definitions from a matrix, prioritizing definitions in the begining of the list
+function instantiate(interaction,interactionDefinitionList) {
+
 }
+
+function findMatchingDefinition(interaction,interactionDefinitionList) {
+  var i;
+  var j;
+  for(i=0;i<interactionDefinitionList.length;i++) {
+    for(j=0;j<interactionDefinitionList.length;j++) {
+      interactionDefinitionList[0](interaction.operator);
+    }
+  }
+
+}
+
+
+function isBaseInteraction(interaction) {
+ switch (interaction.operator) {
+  case "previous$":
+
+     break;
+  case "previous$":
+
+     break;
+   default:
+
+ }
+}
+
+
 
 module.exports.listOfInteractions = listOfInteractions;
