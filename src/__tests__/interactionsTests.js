@@ -139,8 +139,48 @@ describe('interactions', function() {
 
   describe('substitute in interaction', function() {
 
-  //TODO
+    it('case 1', function() {
+        expect(
+          interactions.compare(
+            interactions.substituteInInteraction(
+              parser.parse("(bob(joe(5)(6))and(lol))", {startRule: "interaction"}),
+              parser.parse("(joe(5)(6))", {startRule: "interaction"}),
+              parser.parse("(a)", {startRule: "interaction"})
+            ),
+            parser.parse("(bob(a)and(lol))", {startRule: "interaction"})
+        )===0
+        ).toBeTruthy();
+      });
 
+      it('case 2', function() {
+        expect(
+          interactions.compare(
+            interactions.substituteInInteraction(
+              parser.parse("(bob(joe(5)(6))and(joe(5)(6)))", {startRule: "interaction"}),
+              parser.parse("(joe(5)(6))", {startRule: "interaction"}),
+              parser.parse("(a)", {startRule: "interaction"})
+            ),
+            parser.parse("(bob(a)and(a))", {startRule: "interaction"})
+        )===0
+        ).toBeTruthy();
+      });
+
+      it('case 3', function() {
+      expect(
+        interactions.compare(
+          interactions.substituteInInteraction(
+          interactions.substituteInInteraction(
+            parser.parse("(bob(x)and(y))", {startRule: "interaction"}),
+            parser.parse("(x)", {startRule: "interaction"}),
+            parser.parse("(lol(y))", {startRule: "interaction"})
+          ),
+          parser.parse("(y)", {startRule: "interaction"}),
+          parser.parse("(bobie(4))", {startRule: "interaction"})
+        ),
+          parser.parse("(bob(lol(bobie(4)))and(bobie(4)))", {startRule: "interaction"})
+      )===0
+      ).toBeTruthy();
+    });
 
   });
 
