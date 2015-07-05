@@ -47,20 +47,6 @@ gulp.task('parser',function() {
   .pipe(gulp.dest('dist'));
 });
 
-// gulp.task('test',['dist'], function (cb) {
-//   gulp.src('dist/**/*.js')
-//   .pipe(plumber())
-//   .pipe(istanbul())
-//   .pipe(istanbul.hookRequire())
-//   .on('finish', function () {
-//     gulp.src('test/test.js')
-//     .pipe(plumber())
-//     .pipe(mocha())
-//     .pipe(istanbul.writeReports())
-//     .on('end', cb);
-//   });
-// });
-
 gulp.task('watch',['dist'], function() {
   gulp.watch('src/**/*.*', ['test']);
   gulp.watch('test/**/*.*', ['test']);
