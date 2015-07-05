@@ -29,9 +29,23 @@ describe('parser', function() {
   });
 
   describe('interaction definition', function() {
+    it('should parse a simple interaction definition', function() {
+      var parseResult = parser.parse('interaction (a):Number in is (b)', {
+        startRule: "interactionDefinition"
+      });
 
+      expect(parseResult.signature.operator).toEqual('a');
 
+    });
 
+    it('should parse a composite interaction definition', function() {
+      var parseResult = parser.parse('interaction (a(x:Number out)):Number in is (b(x))', {
+        startRule: "interactionDefinition"
+      });
+
+      expect(parseResult.signature.operator).toEqual('a$');
+
+    });
 
   });
 
