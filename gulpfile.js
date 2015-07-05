@@ -39,10 +39,20 @@ gulp.task('javascript',function() {
   .pipe(gulp.dest('dist'));
 });
 
-gulp.task('parser',function() {
-  return gulp.src('src/**/*.pegjs')
+gulp.task('parser',['language parser','operator parser']);
+
+gulp.task('language parser',function() {
+  return gulp.src('src/parser.pegjs')
   .pipe(peg({
-    allowedStartRules:["start","interaction","interface","data"]
+    allowedStartRules:["start","interaction","interface","data","interactionDefinition"]
+  }))
+  .pipe(gulp.dest('dist'));
+});
+
+gulp.task('operator parser',function() {
+  return gulp.src('src/operator.pegjs')
+  .pipe(peg({
+    allowedStartRules:["start"]
   }))
   .pipe(gulp.dest('dist'));
 });

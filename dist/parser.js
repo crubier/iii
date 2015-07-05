@@ -29,7 +29,7 @@ module.exports = (function() {
 
         peg$FAILED = {},
 
-        peg$startRuleFunctions = { start: peg$parsestart, interaction: peg$parseinteraction, interface: peg$parseinterface, data: peg$parsedata },
+        peg$startRuleFunctions = { start: peg$parsestart, interaction: peg$parseinteraction, interface: peg$parseinterface, data: peg$parsedata, interactionDefinition: peg$parseinteractionDefinition },
         peg$startRuleFunction  = peg$parsestart,
 
         peg$c0 = peg$FAILED,

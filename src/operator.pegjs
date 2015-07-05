@@ -80,22 +80,6 @@ custom 'a non basic interaction'
 
 
 ////////////////////////////////////////////////////////////////////////////////
-// Kind of useless stuff (it is here because the way we build requires these given start rules... TODO )
-
-direction 'the direction of a data flow'
-= 'out' / 'in' / 'ref'
-
-interaction 'interaction'
-= 'stub'
-
-interface 'interface'
-= 'stub'
-
-data 'data'
-= 'stub'
-
-
-////////////////////////////////////////////////////////////////////////////////
 // Literals and leaves of the AST
 
 operatorIdentifier 'an operator identifier'
