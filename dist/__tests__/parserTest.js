@@ -1,15 +1,27 @@
-jest.dontMock('pegjs').dontMock('fs');
+jest.dontMock('../parser.js').dontMock('lodash');
 // TODO
-// var fs = require('fs');
-// var pegjs = require('pegjs');
-// var parserCode = fs.readFileSync('src/parser.pegjs', {encoding:'utf8'});
-// // console.log(parserCode);
-// var parser = pegjs.buildParser(parserCode);
-// // console.log(parser);
-// var testExpression = fs.readFileSync('example/test.iii',{encoding:'utf8'});
-//
-// // describe('parser',function(){
-// //   it('parse',function(){
-// //     parser.parse(testExpression);
-// //   });
-// // });
+
+
+var parser = require('../parser.js');
+
+describe('parser',function(){
+
+  describe('interaction',function(){
+
+    it('should parse a simple interaction',function(){
+      var parseResult = parser.parse('(x(y)(z))',{startRule: "interaction"});
+      expect(parseResult.operator).toEqual('x$$');
+      expect(parseResult.operand[0].operator).toEqual('y');
+      expect(parseResult.operand[1].operator).toEqual('z');
+    });
+
+    it('should parse a more complex interaction',function(){
+    var parseResult = parser.parse('(x(y(a))(z({w:(3)})))',{startRule: "interaction"});
+    expect(parseResult.operator).toEqual('x$$');
+    expect(parseResult.operand[0].operator).toEqual('y$');
+    expect(parseResult.operand[1].operand[0].operator).toEqual('{w:$}');
+  });
+
+  });
+
+});
