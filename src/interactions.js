@@ -22,6 +22,7 @@ function expand(interactionDefinition) {
 }
 
 //TODO
+//ONGOING
 // instantiate an interaction (expand this interaction) using definitions from a matrix, prioritizing definitions in the begining of the list
 function instantiate(interaction, interactionDefinition) {
 
@@ -31,17 +32,16 @@ function instantiate(interaction, interactionDefinition) {
 
 
   if(interactionMatchesDefinition(interaction,interactionDefinition)) {
-
-    var expandedInteraction = expand(interactionDefinition.interaction);
-
+    // var expandedInteraction = expand(interactionDefinition.interaction);
     // interactionDefinition.signature.operand   and   interaction.operand    do match !
     return _.reduce(
-      _.zip(  interaction.operand,interactionDefinition.signature.operand),
+      _.zip(  interactionDefinition.signature.operand,instantiatedOperands),
       function(accumulator, value, key, collection)  {
-        console.log("substitution " + JSON.stringify(value));
-        return substituteInInteraction(accumulator, value[0], value[1]);
+        var target = {type:"InteractionSimple",operator:value[0].name,operand:[]};
+        var substitute = value[1];
+        // console.log("substitution " + JSON.stringify([target,substitute]));
+        return substituteInInteraction(accumulator, target, substitute);
     }, _.cloneDeep(interaction));
-
   } else {
     return {
       type:"InteractionSimple",
