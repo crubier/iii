@@ -16,9 +16,43 @@ function listOfInteractions(theInteraction) {
   }
 }
 
-// instantiate an interaction (expand this interaction) using definitions from a matrix, prioritizing definitions in the begining of the list
-function instantiate(interaction, interactionDefinitionList) {
+// fully expand an interaction definition into a composition of base interactions
+function expand(interactionDefinition) {
+  //TODO
+}
 
+//TODO
+// instantiate an interaction (expand this interaction) using definitions from a matrix, prioritizing definitions in the begining of the list
+function instantiate(interaction, interactionDefinition) {
+
+  var instantiatedOperands = _.map(interaction.operand,function(x){
+      return instantiate(x,interactionDefinition);
+  });
+
+
+  if(interactionMatchesDefinition(interaction,interactionDefinition)) {
+
+    var expandedInteraction = expand(interactionDefinition.interaction);
+
+    // interactionDefinition.signature.operand   and   interaction.operand    do match !
+    return _.reduce(
+      _.zip(  interaction.operand,interactionDefinition.signature.operand),
+      function(accumulator, value, key, collection)  {
+        console.log("substitution " + JSON.stringify(value));
+        return substituteInInteraction(accumulator, value[0], value[1]);
+    }, _.cloneDeep(interaction));
+
+  } else {
+    return {
+      type:"InteractionSimple",
+      operator:interaction.operator,
+      operand:instantiatedOperands
+    };
+  }
+}
+
+function computeDefinitionList(interactiondefinition) {
+  //TODO
 }
 
 function findMatchingDefinition(interaction, interactionDefinitionList) {
@@ -31,7 +65,13 @@ function findMatchingDefinition(interaction, interactionDefinitionList) {
   }
 }
 
-// Compare two interaction, return 0 if they are equal
+// Check if an interaction matches an InteractionDefinition, simple for the moment, will get more complicated later
+function interactionMatchesDefinition(interaction,interactiondefinition) {
+  return interaction.operator === interactiondefinition.signature.operator;
+}
+
+
+// Compare two interaction, returns 0 if they are equal
 function compare(a, b) {
   if (a.operator > b.operator) {
     return 1;
@@ -55,7 +95,6 @@ function compare(a, b) {
 }
 
 // Substitute a target interaction with another one in an interaction expression
-
 function substituteInInteraction(theInteraction, target, substitute) {
   if (compare(theInteraction, target) === 0) {
     return _.cloneDeep(substitute);
@@ -103,3 +142,6 @@ module.exports.isBaseInteraction = isBaseInteraction;
 module.exports.isOnlyMadeOfBaseInteractions = isOnlyMadeOfBaseInteractions;
 module.exports.compare = compare;
 module.exports.substituteInInteraction = substituteInInteraction;
+module.exports.instantiate = instantiate;
+module.exports.interactionMatchesDefinition = interactionMatchesDefinition;
+module.exports.expand = expand;
