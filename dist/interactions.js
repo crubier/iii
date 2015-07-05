@@ -30,18 +30,22 @@ function instantiate(interaction, interactionDefinition) {
       return instantiate(x,interactionDefinition);
   });
 
-
   if(interactionMatchesDefinition(interaction,interactionDefinition)) {
+    // console.log("we have a match "+interaction.operator+ " "+interactionDefinition.signature.operator);
     // var expandedInteraction = expand(interactionDefinition.interaction);
     // interactionDefinition.signature.operand   and   interaction.operand    do match !
+
+    // console.log("operands "+JSON.stringify(instantiatedOperands));
     return _.reduce(
       _.zip(  interactionDefinition.signature.operand,instantiatedOperands),
       function(accumulator, value, key, collection)  {
         var target = {type:"InteractionSimple",operator:value[0].name,operand:[]};
         var substitute = value[1];
         // console.log("substitution " + JSON.stringify([target,substitute]));
-        return substituteInInteraction(accumulator, target, substitute);
-    }, _.cloneDeep(interaction));
+        var res = substituteInInteraction(accumulator, target, substitute);
+        // console.log("result "+JSON.stringify(res));
+        return res;
+    }, _.cloneDeep(interactionDefinition.interaction));
   } else {
     return {
       type:"InteractionSimple",

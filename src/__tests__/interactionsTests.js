@@ -267,38 +267,21 @@ describe('instantiate in interaction', function() {
 
   });
 
-  // it('should instantiate a simple case with no arguments', function() {
-  //   // expect(
-  //   //   interactions.compare(
-  //   //
-  //   //     interactions.instantiate(
-  //   //       parser.parse("(test(a)(b))", {
-  //   //         startRule: "interaction"
-  //   //       }),
-  //   //       parser.parse("interaction (a):Number in is (b)", {
-  //   //         startRule: "interactionDefinition"
-  //   //       })
-  //   //     ),
-  //   //     parser.parse("(test(b)(b))", {
-  //   //       startRule: "interaction"
-  //   //     })
-  //   //   ) === 0
-  //   // ).toBeTruthy();
-  //
-  //   expect(
-  //     interactions.instantiate(
-  //       parser.parse("(test(a)(b))", {
-  //         startRule: "interaction"
-  //       }),
-  //       parser.parse("interaction (a):Number in is (b)", {
-  //         startRule: "interactionDefinition"
-  //       })
-  //     )
-  //   ).toEqual(parser.parse("(test(b)(b))", {
-  //     startRule: "interaction"
-  //   }));
-  //
-  // });
+  it('should instantiate a simple case with no arguments', function() {
+    expect(
+      interactions.instantiate(
+        parser.parse("(test(a)(b))", {
+          startRule: "interaction"
+        }),
+        parser.parse("interaction (a):Number in is (b)", {
+          startRule: "interactionDefinition"
+        })
+      )
+    ).toEqual(parser.parse("(test(b)(b))", {
+      startRule: "interaction"
+    }));
+
+  });
 
   // it('should instantiate a case with arguments', function() {
   // expect(
