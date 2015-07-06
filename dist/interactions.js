@@ -1,5 +1,6 @@
 var _ = require('lodash');
 var operator = require('./operator.js');
+var serializer = require('./serializer.js');
 
 // get the list of all interaction operators in an interaction expression
 function listOfInteractions(theInteraction) {
@@ -18,7 +19,39 @@ function listOfInteractions(theInteraction) {
 
 // fully expand an interaction definition into a composition of base interactions
 function expand(interactionDefinition) {
-  // listNonBaseInteractions(interactionDefinition.interaction);
+
+  var definitions = _.map(interactionDefinition.definitions, expand);
+
+  var interaction = interactionDefinition.interaction;
+
+  var interactionsToExpandAlongWithTheirMatchingDefinition;
+
+  do {
+    interactionsToExpandAlongWithTheirMatchingDefinition =
+      _.filter(
+        _.map(listNonBaseInteractions(interaction),
+          function(x) {
+            return {
+              interaction: x,
+              definition: findMatchingDefinition(x, interactionDefinition)
+            };
+          }),
+        function(x) {
+          return x.definition !== "Argument";
+        });
+
+    _.forEach(interactionsToExpandAlongWithTheirMatchingDefinition,function(x){
+      interaction = instantiate(interaction,x.definition);
+    });
+  } while (interactionsToExpandAlongWithTheirMatchingDefinition.length > 0);
+
+  return {
+    type: "Definition",
+    interaction: interaction, //TODO
+    signature: interactionDefinition.signature,
+    definitions: definitions,
+    parent: interactionDefinition.signature
+  };
 }
 
 
@@ -49,16 +82,18 @@ function instantiate(interaction, interactionDefinition) {
 }
 
 
-function findMatchingDefinition(interaction,interactionDefinition) {
-  if(interactionDefinition===null || interactionDefinition===undefined){
-    throw new Error("could not find a matching definition for interacion "+interaction.operator);
+function findMatchingDefinition(interaction, interactionDefinition) {
+  if (interactionDefinition === null || interactionDefinition === undefined) {
+    throw new Error("could not find definition matching interaction " + serializer.serialize(interaction));
   }
-  if(_.any(interactionDefinition.signature.operand,"name",interaction.operator)) return "Argument";/* TODO precise this return value*/
-  for(var i =0;i<interactionDefinition.definitions.length;i++) {
-    if(interactionMatchesDefinition(interaction, interactionDefinition.definitions[i]))
-    return interactionDefinition.definitions[i];
+  if (_.any(interactionDefinition.signature.operand, "name", interaction.operator)) return "Argument"; /* TODO precise this return value*/
+  console.log("");
+  for (var i = 0; i < interactionDefinition.definitions.length; i++) {
+    console.log("try "+ interaction.operator + " <> "+interactionDefinition.definitions[i].signature.operator);
+    if (interactionMatchesDefinition(interaction, interactionDefinition.definitions[i]))
+      return interactionDefinition.definitions[i];
   }
-  return findMatchingDefinition(interaction,interactionDefinition.parent);
+  return findMatchingDefinition(interaction, interactionDefinition.parent);
 }
 
 // Check if an interaction matches an InteractionDefinition, simple for the moment, will get more complicated later
@@ -115,8 +150,8 @@ function isOnlyMadeOfBaseInteractions(interaction) {
 }
 
 // Gives a list of non base interactions in an interaction expression
-function listNonBaseInteractions(interaction){
-  return (isBaseInteraction(interaction)?[]:[interaction]).concat(_.flatten(interaction.operand.map(listNonBaseInteractions)));
+function listNonBaseInteractions(interaction) {
+  return (isBaseInteraction(interaction) ? [] : [interaction]).concat(_.flatten(interaction.operand.map(listNonBaseInteractions)));
 }
 
 // Checks if a given interaction is a base interaction
