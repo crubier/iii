@@ -318,8 +318,6 @@ describe('instantiate in interaction', function() {
 
 });
 
-
-
 describe('find matching definition', function() {
 
   it('should work on a simple case with a definition on the same level', function() {
@@ -430,8 +428,8 @@ describe('expand', function() {
     }));
   });
 
-
-  it('should work on a case with base interactions', function() {
+/*TODO make this test pass*/
+  it('should work on a complex case with base interactions', function() {
     var interaction = interactions.expand(
       parser.parse("interaction (a(x:Number in)(y:Number out)):Number in with interaction (z):Number in with interaction (k):Number out is (#3) is ((k)in(#1)({})=(k)) is ((x)in(#2)({x:(x),z:(z)})=(y))")[0]
     ).interaction;
@@ -441,8 +439,8 @@ describe('expand', function() {
     }));
   });
 
-  /*TODO make this test pass*/
-  it('should work on a complex case with base interactions', function() {
+
+  it('should work on a case with base interactions', function() {
 
     var interaction = interactions.expand(
           parser.parse("interaction (a(x:Number in)(y:Number out)):Number in with interaction (z):Number in is ((#3)in(#1)({})=(#3)) is ((x)in(#2)({x:(x),z:(z)})=(y))")[0]

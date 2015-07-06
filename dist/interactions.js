@@ -22,6 +22,14 @@ function expand(interactionDefinition) {
 
   var definitions = _.map(interactionDefinition.definitions, expand);
 
+  var interactionDefinitionWithChildrenExpanded = {
+    type: "Definition",
+    interaction: interactionDefinition.interaction,
+    signature: interactionDefinition.signature,
+    definitions: definitions,
+    parent: interactionDefinition.signature
+  };
+
   var interaction = interactionDefinition.interaction;
 
   var interactionsToExpandAlongWithTheirMatchingDefinition;
@@ -33,21 +41,22 @@ function expand(interactionDefinition) {
           function(x) {
             return {
               interaction: x,
-              definition: findMatchingDefinition(x, interactionDefinition)
+              // definition: findMatchingDefinition(x, interactionDefinition)
+              definition: findMatchingDefinition(x, interactionDefinitionWithChildrenExpanded)
             };
           }),
         function(x) {
           return x.definition !== "Argument";
         });
 
-    _.forEach(interactionsToExpandAlongWithTheirMatchingDefinition,function(x){
-      interaction = instantiate(interaction,x.definition);
+    _.forEach(interactionsToExpandAlongWithTheirMatchingDefinition, function(x) {
+      interaction = instantiate(interaction, x.definition);
     });
   } while (interactionsToExpandAlongWithTheirMatchingDefinition.length > 0);
 
   return {
     type: "Definition",
-    interaction: interaction, //TODO
+    interaction: interaction,
     signature: interactionDefinition.signature,
     definitions: definitions,
     parent: interactionDefinition.signature
@@ -83,16 +92,28 @@ function instantiate(interaction, interactionDefinition) {
 
 
 function findMatchingDefinition(interaction, interactionDefinition) {
+  // console.log("");
+  // console.log("TRY "+ interaction.operator );
   if (interactionDefinition === null || interactionDefinition === undefined) {
+    // console.log("FAIL=======================================");
     throw new Error("could not find definition matching interaction " + serializer.serialize(interaction));
   }
-  if (_.any(interactionDefinition.signature.operand, "name", interaction.operator)) return "Argument"; /* TODO precise this return value*/
-  console.log("");
-  for (var i = 0; i < interactionDefinition.definitions.length; i++) {
-    console.log("try "+ interaction.operator + " <> "+interactionDefinition.definitions[i].signature.operator);
-    if (interactionMatchesDefinition(interaction, interactionDefinition.definitions[i]))
-      return interactionDefinition.definitions[i];
+  // console.log("IN "+interactionDefinition.signature.operator);
+  if (_.any(interactionDefinition.signature.operand, "name", interaction.operator)) {
+    // console.log("Argument");
+    return {type:'Definition',interaction:"Argument",signature:{operand:[{"name":interaction.operator}]}}; /* TODO precise this return value*/
   }
+
+// console.log("Definitions ?");
+  for (var i = 0; i < interactionDefinition.definitions.length; i++) {
+    // console.log("try " + interaction.operator + " <> " + interactionDefinition.definitions[i].signature.operator);
+    if (interactionMatchesDefinition(interaction, interactionDefinition.definitions[i])) {
+      // console.log("match");
+      return interactionDefinition.definitions[i];
+    }
+  }
+
+  // console.log("Parent ?");
   return findMatchingDefinition(interaction, interactionDefinition.parent);
 }
 
