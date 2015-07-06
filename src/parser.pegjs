@@ -66,7 +66,14 @@ content 'a definition or an import statement'
 / _ 'import' _ package:[^`]* _ {return parse(fs.readFileSync(filename.join(''),{encoding:'utf8'}));}
 
 interactionDefinition 'an interaction definition'
-= _ 'interaction' _ signature:interactionSignature  _ definitions:(_ 'with' _ definitions:definitions {return definitions;})? _'is' _ interaction:interaction  _{ return {type:'Definition',interaction:interaction,signature:signature,definitions:(definitions===null?[]:definitions)};}
+= _ 'interaction' _ signature:interactionSignature  _ definitions:(_ 'with' _ definitions:definitions {return definitions;})? _'is' _ interaction:interaction  _{
+  var res = {type:'Definition',interaction:interaction,signature:signature,definitions:(definitions===null?[]:definitions)};
+var arrayLength = res.definitions.length;
+for (var i = 0; i < arrayLength; i++) {
+    res.definitions[i].parent = res;
+}
+  return res;
+  }
 
 interactionSignature 'an interaction interactionSignature specification'
 = '('  elements:interactionSignatureElement* _ ')' _ ':' _ interface:interface { var temp = mergeSignature(elements);return {type:'Signature',interface:interface,operator:temp.operator,operand:temp.operand};}

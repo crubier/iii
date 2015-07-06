@@ -52,7 +52,14 @@ module.exports = (function() {
         peg$c17 = { type: "literal", value: "with", description: "\"with\"" },
         peg$c18 = "is",
         peg$c19 = { type: "literal", value: "is", description: "\"is\"" },
-        peg$c20 = function(signature, definitions, interaction) { return {type:'Definition',interaction:interaction,signature:signature,definitions:(definitions===null?[]:definitions)};},
+        peg$c20 = function(signature, definitions, interaction) {
+          var res = {type:'Definition',interaction:interaction,signature:signature,definitions:(definitions===null?[]:definitions)};
+        var arrayLength = res.definitions.length;
+        for (var i = 0; i < arrayLength; i++) {
+            res.definitions[i].parent = res;
+        }
+          return res;
+          },
         peg$c21 = { type: "other", description: "an interaction interactionSignature specification" },
         peg$c22 = "(",
         peg$c23 = { type: "literal", value: "(", description: "\"(\"" },

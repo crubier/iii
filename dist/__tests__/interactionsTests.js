@@ -299,6 +299,49 @@ describe('interactions', function() {
         }));
     });
 
+    it('should instantiate a complex case', function() {
+      expect(
+        interactions.instantiate(
+          parser.parse("(test(a((5)+(6)))(a(b(F(3)))))", {
+            startRule: "interaction"
+          }),
+          parser.parse("interaction (a(x:Number in)):Number out is (bob(x)test(b))", {
+            startRule: "interactionDefinition"
+          })
+        )
+      ).toEqual(
+        parser.parse("(test(bob((5)+(6))test(b))(bob(b(F(3)))test(b)))", {
+          startRule: "interaction"
+        }));
+    });
+
+
+  });
+
+
+
+  describe('find matching definition', function() {
+
+    it('should work on a simple case with a list', function() {
+      var res = parser.parse("interaction (a(x:Number in)):Number out with interaction (b):Number out is (c) is (bob(x)test(b))", {
+        startRule: "interactionDefinition"
+      });
+
+      var b = parser.parse("(b)", {
+        startRule: "interaction"
+      });
+
+      var defb = parser.parse("interaction (b):Number out is (c)", {
+        startRule: "interactionDefinition"
+      });
+
+      var foundDefb = interactions.findMatchingDefinition(b, res);
+      delete foundDefb.parent;
+
+      expect(foundDefb).toEqual(defb);
+    });
+
+
   });
 
 

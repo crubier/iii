@@ -21,61 +21,52 @@ function expand(interactionDefinition) {
   //TODO
 }
 
-//TODO
-//ONGOING
-// instantiate an interaction (expand this interaction) using definitions from a matrix, prioritizing definitions in the begining of the list
+// instantiate an interaction (expand this interaction) using a single definition
 function instantiate(interaction, interactionDefinition) {
-
-  var instantiatedOperands = _.map(interaction.operand,function(x){
-      return instantiate(x,interactionDefinition);
+  var instantiatedOperands = _.map(interaction.operand, function(x) {
+    return instantiate(x, interactionDefinition);
   });
 
-  if(interactionMatchesDefinition(interaction,interactionDefinition)) {
-    // console.log("we have a match "+interaction.operator+ " "+interactionDefinition.signature.operator);
-    // var expandedInteraction = expand(interactionDefinition.interaction);
-    // interactionDefinition.signature.operand   and   interaction.operand    do match !
-
-    // console.log("operands "+JSON.stringify(instantiatedOperands));
+  if (interactionMatchesDefinition(interaction, interactionDefinition)) {
     return _.reduce(
-      _.zip(  interactionDefinition.signature.operand,instantiatedOperands),
-      function(accumulator, value, key, collection)  {
-        var target = {type:"InteractionSimple",operator:value[0].name,operand:[]};
-        var substitute = value[1];
-        // console.log("substitution " + JSON.stringify([target,substitute]));
-        var res = substituteInInteraction(accumulator, target, substitute);
-        // console.log("result "+JSON.stringify(res));
-        return res;
-    }, _.cloneDeep(interactionDefinition.interaction));
+      _.zip(interactionDefinition.signature.operand, instantiatedOperands),
+      function(accumulator, value, key, collection) {
+        return substituteInInteraction(accumulator, {
+          type: "InteractionSimple",
+          operator: value[0].name,
+          operand: []
+        }, value[1]);
+      }, _.cloneDeep(interactionDefinition.interaction));
   } else {
     return {
-      type:"InteractionSimple",
-      operator:interaction.operator,
-      operand:instantiatedOperands
+      type: "InteractionSimple",
+      operator: interaction.operator,
+      operand: instantiatedOperands
     };
   }
 }
 
-function computeDefinitionList(interactiondefinition) {
-  //TODO
-}
 
-function findMatchingDefinition(interaction, interactionDefinitionList) {
-  var i;
-  var j;
-  for (i = 0; i < interactionDefinitionList.length; i++) {
-    for (j = 0; j < interactionDefinitionList.length; j++) {
-      interactionDefinitionList[0](interaction.operator);
-    }
+
+
+function findMatchingDefinition(interaction,interactionDefinition) {
+  if(interactionDefinition===null || interactionDefinition===undefined){
+    throw new Error("could not find a matching definition for interacion "+interaction.operator);
   }
+  for(var i =0;i<interactionDefinition.definitions.length;i++) {
+    if(interactionMatchesDefinition(interaction, interactionDefinition.definitions[i]))
+    return interactionDefinition.definitions[i];
+  }
+  return findMatchingDefinition(interaction,interactionDefinition.parent);
 }
 
 // Check if an interaction matches an InteractionDefinition, simple for the moment, will get more complicated later
-function interactionMatchesDefinition(interaction,interactiondefinition) {
+function interactionMatchesDefinition(interaction, interactiondefinition) {
   return interaction.operator === interactiondefinition.signature.operator;
 }
 
 
-// Compare two interaction, returns 0 if they are equal
+// Compare two interactions, returns 0 if they are equal
 function compare(a, b) {
   if (a.operator > b.operator) {
     return 1;
@@ -149,3 +140,4 @@ module.exports.substituteInInteraction = substituteInInteraction;
 module.exports.instantiate = instantiate;
 module.exports.interactionMatchesDefinition = interactionMatchesDefinition;
 module.exports.expand = expand;
+module.exports.findMatchingDefinition = findMatchingDefinition;
