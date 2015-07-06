@@ -18,8 +18,12 @@ function listOfInteractions(theInteraction) {
 
 // fully expand an interaction definition into a composition of base interactions
 function expand(interactionDefinition) {
-  //TODO
+  var list = listNonBaseInteractions(interactionDefinition.interaction);
+
+  
 }
+
+
 
 // instantiate an interaction (expand this interaction) using a single definition
 function instantiate(interaction, interactionDefinition) {
@@ -47,12 +51,11 @@ function instantiate(interaction, interactionDefinition) {
 }
 
 
-
-
 function findMatchingDefinition(interaction,interactionDefinition) {
   if(interactionDefinition===null || interactionDefinition===undefined){
     throw new Error("could not find a matching definition for interacion "+interaction.operator);
   }
+  if(_.any(interactionDefinition.signature.operand,"name",interaction.operator)) return "Argument";/* TODO precise this return value*/
   for(var i =0;i<interactionDefinition.definitions.length;i++) {
     if(interactionMatchesDefinition(interaction, interactionDefinition.definitions[i]))
     return interactionDefinition.definitions[i];
@@ -113,6 +116,11 @@ function isOnlyMadeOfBaseInteractions(interaction) {
   }
 }
 
+// Gives a list of non base interactions in an interaction expression
+function listNonBaseInteractions(interaction){
+  return (isBaseInteraction(interaction)?[]:[interaction]).concat(_.flatten(interaction.operand.map(listNonBaseInteractions)));
+}
+
 // Checks if a given interaction is a base interaction
 function isBaseInteraction(interaction) {
   var theOperator = operator.parse(interaction.operator);
@@ -141,3 +149,4 @@ module.exports.instantiate = instantiate;
 module.exports.interactionMatchesDefinition = interactionMatchesDefinition;
 module.exports.expand = expand;
 module.exports.findMatchingDefinition = findMatchingDefinition;
+module.exports.listNonBaseInteractions = listNonBaseInteractions;

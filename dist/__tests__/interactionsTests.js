@@ -322,26 +322,75 @@ describe('interactions', function() {
 
   describe('find matching definition', function() {
 
-    it('should work on a simple case with a list', function() {
+    it('should work on a simple case with a definition on the same level', function() {
       var res = parser.parse("interaction (a(x:Number in)):Number out with interaction (b):Number out is (c) is (bob(x)test(b))", {
         startRule: "interactionDefinition"
       });
-
       var b = parser.parse("(b)", {
         startRule: "interaction"
       });
-
       var defb = parser.parse("interaction (b):Number out is (c)", {
         startRule: "interactionDefinition"
       });
-
       var foundDefb = interactions.findMatchingDefinition(b, res);
       delete foundDefb.parent;
-
       expect(foundDefb).toEqual(defb);
     });
 
+    it('should work on a simple case with a definition on the parent', function() {
+      var res = parser.parse("interaction (k):Number in with interaction (b):Number out is (d) interaction (a(x:Number in)):Number out with interaction (b):Number out is (c) is (bob(x)test(b)) is (b)");
+      var b = parser.parse("(b)", {
+        startRule: "interaction"
+      });
+      var rightdefb = parser.parse("interaction (b):Number out is (c)", {
+        startRule: "interactionDefinition"
+      });
+      var wrongdefb = parser.parse("interaction (b):Number out is (d)", {
+        startRule: "interactionDefinition"
+      });
+      var foundDefb = interactions.findMatchingDefinition(b, res[0].definitions[1]);
+      delete foundDefb.parent;
+      expect(foundDefb).toEqual(rightdefb);
+      expect(foundDefb).not.toEqual(wrongdefb);
+    });
 
+    it('should work on a simple case where the interaction is an argument', function() {
+      var res = parser.parse("interaction (k):Number in with interaction (b):Number out is (d) interaction (a(x:Number in)):Number out with interaction (b):Number out is (c) is (bob(x)test(b)) is (b)");
+      var x = parser.parse("(x)", {
+        startRule: "interaction"
+      });
+      var rightDefx = "Argument";
+      var foundDefx = interactions.findMatchingDefinition(x, res[0].definitions[1]);
+      expect(foundDefx).toEqual(rightDefx);
+    });
+  });
+
+
+
+
+  describe('list non base interactions', function() {
+    it('should work on a simple case', function() {
+      var list = interactions.listNonBaseInteractions(parser.parse("({b:(4),y:(cos(sin(previous(x))))})", {
+        startRule: "interaction"
+      }));
+
+      expect(list).toContain(parser.parse("(4)", {
+        startRule: "interaction"
+      }));
+
+      expect(list).toContain(parser.parse("(cos(sin(previous(x))))", {
+        startRule: "interaction"
+      }));
+
+      expect(list).toContain(parser.parse("(sin(previous(x)))", {
+        startRule: "interaction"
+      }));
+
+      expect(list).toContain(parser.parse("(x)", {
+        startRule: "interaction"
+      }));
+
+    });
   });
 
 
