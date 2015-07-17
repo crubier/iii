@@ -154,5 +154,7 @@ function listOfAtoms(theInterface,prefix) {
 
 module.exports = {
   conjugate:conjugateInterface,
-  listOfAtoms:listOfAtoms
+  listOfAtoms:listOfAtoms,
+  receptionInterface:receptionInterface,
+  emissionInterface:emissionInterface
 };

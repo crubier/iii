@@ -37,3 +37,8 @@
 # 0.0.9
 
 - Added iii.interfaces.listOfAtoms()
+
+# 0.0.10
+
+- Added iii.interfaces.emissionInterface()
+- Added iii.interfaces.receptionInterface()

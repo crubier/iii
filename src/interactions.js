@@ -17,7 +17,7 @@ function listOfInteractions(theInteraction) {
   }
 }
 
-// fully expand an interaction definition into a composition of base interactions
+// Fully expand an interaction definition into a composition of base interactions
 function expand(interactionDefinition) {
 
   var definitions = _.map(interactionDefinition.definitions, expand);
@@ -34,6 +34,7 @@ function expand(interactionDefinition) {
 
   var interactionsToExpandAlongWithTheirMatchingDefinition;
 
+
   do {
     interactionsToExpandAlongWithTheirMatchingDefinition =
       _.filter(
@@ -41,14 +42,14 @@ function expand(interactionDefinition) {
           function(x) {
             return {
               interaction: x,
-              // definition: findMatchingDefinition(x, interactionDefinition)
               definition: findMatchingDefinition(x, interactionDefinitionWithChildrenExpanded)
             };
           }),
         function(x) {
-          return x.definition !== "Argument";
+          return !isDefinitionOfAnArgument(x.definition);
         });
 
+    // For each of these interactions to expand, we instatiate them
     _.forEach(interactionsToExpandAlongWithTheirMatchingDefinition, function(x) {
       interaction = instantiate(interaction, x.definition);
     });
@@ -67,10 +68,18 @@ function expand(interactionDefinition) {
 
 // instantiate an interaction (expand this interaction) using a single definition
 function instantiate(interaction, interactionDefinition) {
+  // If the definition states that
+  if(isDefinitionOfAnArgument(interactionDefinition)){
+    return interaction;
+  }
+
+  // First we instantiate the operands
   var instantiatedOperands = _.map(interaction.operand, function(x) {
     return instantiate(x, interactionDefinition);
   });
 
+
+  // Do we substitute this interaction or not ?
   if (interactionMatchesDefinition(interaction, interactionDefinition)) {
     return _.reduce(
       _.zip(interactionDefinition.signature.operand, instantiatedOperands),
@@ -91,35 +100,48 @@ function instantiate(interaction, interactionDefinition) {
 }
 
 
+// Finds the definition that matches an interaction, in the context of an interaction definition
 function findMatchingDefinition(interaction, interactionDefinition) {
-  // console.log("");
-  // console.log("TRY "+ interaction.operator );
+
+  // First case : No definition
   if (interactionDefinition === null || interactionDefinition === undefined) {
-    // console.log("FAIL=======================================");
     throw new Error("could not find definition matching interaction " + serializer.serialize(interaction));
   }
-  // console.log("IN "+interactionDefinition.signature.operator);
+
+  // Second case : The interaction definition specifies that it is an argument (not really possible ?)
+  if(isDefinitionOfAnArgument(interactionDefinition)){
+    return "Argument";
+  }
+
+  // console.log(interactionDefinition);
+
+  // Third case : The interaction is an argument of the definition
   if (_.any(interactionDefinition.signature.operand, "name", interaction.operator)) {
-    // console.log("Argument");
     // return {type:'Definition',interaction:"Argument",signature:{operand:[{"name":interaction.operator}]}}; /* TODO precise this return value*/
     return "Argument"; /* TODO problem is here !*/
   }
 
-// console.log("Definitions ?");
+  // Fourth case : The interaction is defined within the sub definitions of the definition
   for (var i = 0; i < interactionDefinition.definitions.length; i++) {
-    // console.log("try " + interaction.operator + " <> " + interactionDefinition.definitions[i].signature.operator);
     if (interactionMatchesDefinition(interaction, interactionDefinition.definitions[i])) {
-      // console.log("match");
       return interactionDefinition.definitions[i];
     }
   }
 
-  // console.log("Parent ?");
+  // Fifth case: The interaction is defined in the context of the parent definition (the definition is a sub definition of its parent)
   return findMatchingDefinition(interaction, interactionDefinition.parent);
+}
+
+// Checks if an interaction definition states that an interaction is an argument
+function isDefinitionOfAnArgument(definition){
+  // {type:'Definition',interaction:interaction,signature:{type:'Signature',interface:interface,operator:temp.operator,operand:temp.operand},definitions:(definitions===null?[]:definitions)};
+  return definition==="Argument";
+
 }
 
 // Check if an interaction matches an InteractionDefinition, simple for the moment, will get more complicated later
 function interactionMatchesDefinition(interaction, interactiondefinition) {
+  if(isDefinitionOfAnArgument(interactiondefinition))return true;
   return interaction.operator === interactiondefinition.signature.operator;
 }
 
