@@ -1,11 +1,6 @@
-var parser = require('./dist/parser.js');
-
-var interfaces = require('./dist/interfaces.js');
-
-var interactions = require('./dist/interactions.js');
-
-module.exports.parser = parser;
-
-module.exports.interfaces = interfaces;
-
-module.exports.interactions = interactions;
+module.exports = {
+  interactions: require('./dist/interactions.js'),
+  interfaces: require('./dist/interfaces.js'),
+  parser:require('./dist/parser.js'),
+  serializer:require('./dist/serializer.js')
+}

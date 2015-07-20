@@ -42,3 +42,8 @@
 
 - Added iii.interfaces.emissionInterface()
 - Added iii.interfaces.receptionInterface()
+
+# 0.0.11
+
+- Added iii.serializer
+- Added iii.interactions
