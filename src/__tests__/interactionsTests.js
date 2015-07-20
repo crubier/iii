@@ -1,4 +1,10 @@
-jest.dontMock('../interactions.js').dontMock('../parser.js').dontMock('../serializer.js').dontMock('../operator.js').dontMock('lodash');
+jest.dontMock('../interactions.js')
+.dontMock('../parser.js')
+.dontMock('../serializer.js')
+.dontMock('../operator.js')
+.dontMock('lodash')
+// .dontMock('circular-json')
+.dontMock('json-stringify-safe');
 
 
 
@@ -401,70 +407,69 @@ describe('list non base interactions', function() {
   });
 });
 
-// describe('expand', function() {
-//   it('should work on a simple case', function() {
-//     var interaction = interactions.expand(
-//       parser.parse("interaction (joe(x:Number in)):Number in is (x)")[0]
-//     ).interaction;
-//     expect(interaction).toEqual(parser.parse("(x)", {
-//       startRule: "interaction"
-//     }));
-//   });
-//
-//   it('should work on a simple case with a closure', function() {
-//     var interaction = interactions.expand(
-//       parser.parse("interaction (joe(x:Number in)):Number in with interaction (a):Number in is (x) is (a)")[0]
-//     ).interaction;
-//     expect(interaction).toEqual(parser.parse("(x)", {
-//       startRule: "interaction"
-//     }));
-//   });
-//
-//   it('should error on a erroneous case', function() {
-//     expect(function() {
-//       interactions.expand(
-//         parser.parse("interaction (joe(x:Number in)):Number in with interaction (a):Number in is (2) is (a)")[0]
-//       );
-//     }).toThrow("could not find definition matching interaction (2)");
-//   });
-//
-//   it('should work on a simple case with base interactions', function() {
-//     var interaction = interactions.expand(
-//       parser.parse("interaction (a(x:Number in)(y:Number out)):Number in is ({x:(x),y:(y)})")[0]
-//     ).interaction;
-//
-//     expect(interaction).toEqual(parser.parse("({x:(x),y:(y)})", {
-//       startRule: "interaction"
-//     }));
-//   });
-//
-// /*TODO make this test pass*/
-//   it('should work on a complex case with base interactions', function() {
-//     var interaction = interactions.expand(
-//       parser.parse("interaction (a(x:Number in)(y:Number out)):Number in with interaction (z):Number in with interaction (k):Number out is (#3) is ((k)in(#1)({})=(k)) is ((x)in(#2)({x:(x),z:(z)})=(y))")[0]
-//     ).interaction;
-//
-//     expect(interaction).toEqual(parser.parse("((x)in(#2)({x:(x),z:((#3)in(#1)({})=(#3))})=(y))", {
-//       startRule: "interaction"
-//     }));
-//   });
-//
-//
-//   it('should work on a case with base interactions', function() {
-//
-//     var interaction = interactions.expand(
-//           parser.parse("interaction (a(x:Number in)(y:Number out)):Number in with interaction (z):Number in is ((#3)in(#1)({})=(#3)) is ((x)in(#2)({x:(x),z:(z)})=(y))")[0]
-//         ).interaction;
-//
-//     expect(interaction).toEqual(parser.parse("((x)in(#2)({x:(x),z:((#3)in(#1)({})=(#3))})=(y))", {
-//       startRule: "interaction"
-//     }));
-//   });
-//
-//
-//
-// });
-//
+describe('expand', function() {
+  it('should work on a simple case', function() {
+    var interaction = interactions.expand(
+      parser.parse("interaction (joe(x:Number in)):Number in is (x)")[0]
+    ).interaction;
+    expect(interaction).toEqual(parser.parse("(x)", {
+      startRule: "interaction"
+    }));
+  });
+  it.only('should work on a simple case with a closure', function() {
+    var interaction = interactions.expand(
+      parser.parse("interaction (joe(x:Number in)):Number in with interaction (a):Number in is (x) is (a)")[0]
+    ).interaction;
+    expect(interaction).toEqual(parser.parse("(x)", {
+      startRule: "interaction"
+    }));
+  });
+
+  it('should error on a erroneous case', function() {
+    expect(function() {
+      interactions.expand(
+        parser.parse("interaction (joe(x:Number in)):Number in with interaction (a):Number in is (2) is (a)")[0]
+      );
+    }).toThrow("could not find definition matching interaction (2)");
+  });
+
+  it('should work on a simple case with base interactions', function() {
+    var interaction = interactions.expand(
+      parser.parse("interaction (a(x:Number in)(y:Number out)):Number in is ({x:(x),y:(y)})")[0]
+    ).interaction;
+
+    expect(interaction).toEqual(parser.parse("({x:(x),y:(y)})", {
+      startRule: "interaction"
+    }));
+  });
+
+/*TODO make this test pass*/
+  it('should work on a complex case with base interactions', function() {
+    var interaction = interactions.expand(
+      parser.parse("interaction (a(x:Number in)(y:Number out)):Number in with interaction (z):Number in with interaction (k):Number out is (#3) is ((k)in(#1)({})=(k)) is ((x)in(#2)({x:(x),z:(z)})=(y))")[0]
+    ).interaction;
+
+    expect(interaction).toEqual(parser.parse("((x)in(#2)({x:(x),z:((#3)in(#1)({})=(#3))})=(y))", {
+      startRule: "interaction"
+    }));
+  });
+
+
+  it('should work on a case with base interactions', function() {
+
+    var interaction = interactions.expand(
+          parser.parse("interaction (a(x:Number in)(y:Number out)):Number in with interaction (z):Number in is ((#3)in(#1)({})=(#3)) is ((x)in(#2)({x:(x),z:(z)})=(y))")[0]
+        ).interaction;
+
+    expect(interaction).toEqual(parser.parse("((x)in(#2)({x:(x),z:((#3)in(#1)({})=(#3))})=(y))", {
+      startRule: "interaction"
+    }));
+  });
+
+
+
+});
+
 
 
 });
