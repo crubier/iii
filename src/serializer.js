@@ -9,7 +9,6 @@ function serialize(object) {
   }
 }
 
-
 // Interaction
 function serializeInteractionSimple(object) {
   var list = object.operator.split("$");
