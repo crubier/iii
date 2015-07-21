@@ -8,23 +8,18 @@ var _ = require('lodash');
 describe('iii', function() {
 
 
-
-
-
-
-
   it('should work on example files', function() {
 
-    var list = ["test"];
-      // "small",
-      // "small2",
-      // "smallfct",
-      // "test",
-      // "test2",
-      // "justFct",
-      // "testCase",
+    var list = [
+      "small",
+      "small2",
+      "smallfct",
+      "test",
+      "test2",
+      "justFct",
+      "testCase"
       // "testCase2"
-    // ];
+    ];
 
     _.forEach(list, function(x) {
 

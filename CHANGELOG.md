@@ -1,5 +1,10 @@
 # iii changelog
 
+# 0.1.1
+
+- Quick fix in index.js causing problems
+
+
 # 0.1.0
 
 - Added iii.compiler.compileToIii()
