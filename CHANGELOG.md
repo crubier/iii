@@ -1,49 +1,51 @@
 # iii changelog
 
-# 0.0.1
+# 0.1.0
 
-- Initial Release
+- Added iii.compiler.compileToIii()
 
+# 0.0.11
 
-# 0.0.2
-
-- Change lots of things...
-
-# 0.0.3
-
-- Quick fix
-
-# 0.0.4
-
-- Quick fix
-
-# 0.0.5
-
-- Quick fix again
-
-
-# 0.0.6
-
-- Change The parser stating rule
-
-# 0.0.7
-
-- Add various parsing start rules
-
-# 0.0.8
-
-- Fixes
-
-# 0.0.9
-
-- Added iii.interfaces.listOfAtoms()
+- Added iii.serializer
+- Added iii.interactions
 
 # 0.0.10
 
 - Added iii.interfaces.emissionInterface()
 - Added iii.interfaces.receptionInterface()
 
-# 0.0.11
+# 0.0.9
 
-- Added iii.serializer
-- Added iii.interactions
+- Added iii.interfaces.listOfAtoms()
+
+# 0.0.8
+
+- Fixes
+
+# 0.0.7
+
+- Add various parsing start rules
+
+# 0.0.6
+
+- Change The parser stating rule
+
+# 0.0.5
+
+- Quick fix again
+
+# 0.0.4
+
+- Quick fix
+
+# 0.0.3
+
+- Quick fix
+
+# 0.0.2
+
+- Change lots of things...
+
+# 0.0.1
+
+- Initial Release

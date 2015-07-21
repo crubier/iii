@@ -14,6 +14,23 @@ var _ = require('lodash');
 
 describe('interactions', function() {
 
+  describe('compare interactions', function() {
+
+    it('simple', function() {
+      expect(interactions.compare({
+          "type": "InteractionSimple",
+          "operator": "#hdhsd",
+          "operand": []
+        }, {
+          "type": "InteractionSimple",
+          "operator": "#hdhsd",
+          "operand": []
+        }))
+        .toEqual(0);
+    });
+
+  });
+
   describe('list of interactions', function() {
 
     it('simple', function() {

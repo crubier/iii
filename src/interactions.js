@@ -182,7 +182,12 @@ function interactionMatchesDefinition(interaction, interactiondefinition) {
 
 // Compare two interactions, returns 0 if they are equal
 function compare(a, b) {
-  if (a.type !== 'InteractionSimple' || b.type !== 'InteractionSimple') return -1;
+  if (a.type !== 'InteractionSimple' || b.type !== 'InteractionSimple') {
+    if(a.type==="InteractionNative" && b.type === "InteractionNative") {
+      return ((_.isEqual(a.code,b.code))?(0):(1));
+    }
+    return -1;
+  }
   if (a.operator > b.operator) {
     return 1;
   } else {
