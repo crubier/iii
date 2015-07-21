@@ -1,9 +1,11 @@
+var escodegen = require('escodegen');
+
 function serialize(object) {
   switch (object.type) {
     case 'InteractionSimple':
       return serializeInteractionSimple(object);
-    case 'InteractionJavascript':
-      return serializeInteractionJavascript(object);
+    case 'InteractionNative':
+      return serializeInteractionNative(object);
     default:
       throw new Error('Cannot serialize '+object.type);
   }
@@ -22,8 +24,8 @@ function serializeInteractionSimple(object) {
   return res;
 }
 
-function serializeInteractionJavascript(object) {
-  return "(js` /*TODO*/`)";
+function serializeInteractionNative(object) {
+  return "("+object.language+"`"+escodegen.generate(object.code)+"`)";
 }
 
 module.exports.serialize = serialize;

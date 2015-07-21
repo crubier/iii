@@ -48,10 +48,14 @@ describe('data data', function() {
       it('should detect valid composite type', function() {
         expect(data.isValid({
           type: "DataComposite",
-          element: [{type:"DataCompositeElement",key:"joe",value:{
-            type: "DataAtomic",
-            name: "Boolean"
-          }}]
+          element: [{
+            type: "DataCompositeElement",
+            key: "joe",
+            value: {
+              type: "DataAtomic",
+              name: "Boolean"
+            }
+          }]
         })).toBeTruthy();
       });
 
@@ -79,31 +83,36 @@ describe('data data', function() {
         })).toBeTruthy();
       });
 
-//TODO
+      //TODO
       it('should detect valid operation type', function() {
         expect(data.isValid({
           type: "DataOperation",
           operator: 'union',
-          operand: [
-            {
-              type: "DataComposite",
-              element: [{type:"DataCompositeElement",key:"joe",value:{
+          operand: [{
+            type: "DataComposite",
+            element: [{
+              type: "DataCompositeElement",
+              key: "joe",
+              value: {
                 type: "DataAtomic",
                 name: "Boolean"
-              }}]
-            },
-            {
-              type: "DataComposite",
-              element: [{type:"DataCompositeElement",key:"bob",value:{
+              }
+            }]
+          }, {
+            type: "DataComposite",
+            element: [{
+              type: "DataCompositeElement",
+              key: "bob",
+              value: {
                 type: "DataAtomic",
                 name: "Number"
-              }}]
-            }
-          ]
+              }
+            }]
+          }]
         })).toBeTruthy();
       });
 
-//TODO
+      //TODO
       // it('should prevent invalid operation type', function() {
       //   expect(data.isValid({
       //     type: "DataOperation",
@@ -543,8 +552,7 @@ describe('data data', function() {
                 type: "DataAtomic",
                 name: "Number"
               }
-            },
-            {
+            }, {
               type: "DataCompositeElement",
               key: "XYZ",
               value: {

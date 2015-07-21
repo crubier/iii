@@ -1,2 +1,4 @@
-(test):number out=
-  (1)
+interaction
+  (test):Number out
+is
+  (#1)

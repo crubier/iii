@@ -88,12 +88,15 @@ interactionSignatureElement 'a interactionSignature element'
 / _ '(' _ name:variableIdentifier _':'_ interface:interface _ ')' {return {operand:{interface:interface,name:name}};}
 
 interaction 'an interaction'
-= '(js`' val:[^`]* '`)'  {return {type:'InteractionJavascript',native:esprima.parse(val.join(''))};}
+= '('lang:language   '`' val:[^`]* '`)'  {return {type:'InteractionNative',language:lang,code:esprima.parse(val.join(''))};}
 / '(' elements:interactionElement* _ ')' {var temp=  mergeExpression(elements);return {type:'InteractionSimple',operator:temp.operator,operand:temp.operand};}
 
 interactionElement 'an interaction element'
 = _ operand:interaction {return {operand:operand};}
 / _ operator:operatorIdentifier {return {operator:operator};}
+
+language 'the name of a supported programming language'
+= 'js' / 'es6' / 'javascript' / 'c' / 'c++'
 
 
 ////////////////////////////////////////////////////////////////////////////////
