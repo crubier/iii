@@ -28,7 +28,7 @@ function Variable()
     this.setUnit = function(sign) {
         this.unit = true;
         this.unit_sign = sign;
-    }
+    };
 }
 
 /*

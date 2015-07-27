@@ -25,8 +25,12 @@ with
   interaction (all(a:Activation out)(b:Activation out)):Activation in
   is ((#all(a)(b)) in (js`o={a:i,b:i}`)(#all(a)(b))=({a:(a),b:(b)}))
 
+  interaction ((a:Composed in).x):Number out
+  is ((#(a).x)in(js`o=i;`)(a)=({x:(#(a).x)}))
+
 is
   (all
-    (when(click)then((new(x))=((previous(x))+(1))))
+    (when(click)
+       then((new(x))=((previous(x))+(1))))
     (make(x)flow)
   )

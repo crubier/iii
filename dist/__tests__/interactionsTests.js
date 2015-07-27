@@ -2,9 +2,8 @@ jest.dontMock('../interactions.js')
   .dontMock('../parser.js')
   .dontMock('../serializer.js')
   .dontMock('../operator.js')
-  .dontMock('lodash')
-  // .dontMock('circular-json')
-  .dontMock('json-stringify-safe');
+  .dontMock('lodash');
+
 
 
 
