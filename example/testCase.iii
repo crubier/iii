@@ -30,7 +30,6 @@ with
 
 is
   (all
-    (when(click)
-       then((new(x))=((previous(x))+(1))))
+    (when(click)then((new(x))=((previous(x))+(1))))
     (make(x)flow)
   )
