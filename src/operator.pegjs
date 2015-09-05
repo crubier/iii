@@ -1,5 +1,4 @@
 {
-  var esprima = require('esprima');
   var fs = require('fs');
 
   var resolver = options.resolver;
@@ -53,17 +52,10 @@
 //TODO
 
 start
-= composition / selection / previous / identifier / functionApplication / custom
-
-
-
-
+= composition / previous / identifier / functionApplication / function  / custom / void
 
 composition 'a composition interaction'
 = _ '{' _ (key:keyIdentifier _':'_'$'_ (',' _)? )* '}' _ {return "Composition";}
-
-selection 'a selection interaction'
-= _ '$' _ '.' _ key:keyIdentifier _ {return "Selection";}
 
 previous 'a previous interaction'
 = _ 'previous' _ '$' _ {return "Previous";}
@@ -74,8 +66,14 @@ identifier 'an identifier interaction'
 functionApplication 'a function application interaction'
 = _ '$' _ 'in' _ '$' _ '$' _ '=' _ '$' _ {return "FunctionApplication";}
 
+function 'a function'
+= _ '`' _ (identifier:functionIdentifier) _ '`' _ {return "Function";}
+
+void 'the void interaction'
+= _ {return "Void";}
+
 custom 'a non basic interaction'
-= _ [^ \t\r\n_\(\)\`]+ _ {return "Custom";}
+= _ [^ \t\r\n_\(\)]+ _ {return "Custom";}
 
 
 
@@ -83,7 +81,7 @@ custom 'a non basic interaction'
 // Literals and leaves of the AST
 
 operatorIdentifier 'an operator identifier'
-= val:[^ \t\r\n$_\(\)\`]+ { return val.join(''); }
+= val:[^ \t\r\n$\(\)\`]+ { return val.join(''); }
 
 interfaceIdentifier 'an interface identifier'
 = first:[A-Z] rest:[a-zA-Z0-9]* { return mergeElements(first,rest).join(''); }
@@ -96,6 +94,9 @@ variableIdentifier 'a variable identifier'
 
 keyIdentifier 'a key identifier'
 = first:[a-z0-9] rest:[a-zA-Z0-9]* { return mergeElements(first,rest).join(''); }
+
+functionIdentifier 'a C-compatible function identifier'
+= first:[a-zA-Z_] rest:[a-zA-Z0-9_]* { return mergeElements(first,rest).join(''); }
 
 _ 'white space'
 = [ \t\r\n]*

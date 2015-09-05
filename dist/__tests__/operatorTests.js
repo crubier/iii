@@ -37,18 +37,18 @@ describe('operator', function() {
 
   });
 
-  describe('selection', function() {
+  describe('function', function() {
 
-    it('should detect selection', function() {
-      expect(operator.parse("$.waouh")).toEqual("Selection");
+    it('should detect function', function() {
+      expect(operator.parse("`aaa`")).toEqual("Function");
     });
 
-    it('should detect selection with a number as key', function() {
-      expect(operator.parse("$.1")).toEqual("Selection");
+    it('should detect function', function() {
+      expect(operator.parse("`bobie_joe5`")).toEqual("Function");
     });
 
-    it('should invalidate selection with an invalid key', function() {
-      expect(operator.parse("$.Lolie")).toEqual("Custom");
+    it('should invalidate function with an invalid name', function() {
+      expect(operator.parse("`5jf`")).toEqual("Custom");
     });
 
   });

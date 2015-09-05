@@ -1,2 +1,2 @@
 interaction (test2):Number out
-is (js`2+2;`)
+is (`return1`)

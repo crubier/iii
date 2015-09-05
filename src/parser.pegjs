@@ -1,5 +1,4 @@
 {
-  var esprima = require('esprima');
   var fs = require('fs');
 
   var resolver = options.resolver;
@@ -88,15 +87,16 @@ interactionSignatureElement 'a interactionSignature element'
 / _ '(' _ name:variableIdentifier _':'_ interface:interface _ ')' {return {operand:{interface:interface,name:name}};}
 
 interaction 'an interaction'
-= '('lang:language   '`' val:[^`]* '`)'  {return {type:'InteractionNative',language:lang,code:esprima.parse(val.join(''))};}
-/ '(' elements:interactionElement* _ ')' {var temp=  mergeExpression(elements);return {type:'InteractionSimple',operator:temp.operator,operand:temp.operand};}
+//= '('lang:language   '`' val:[^`]* '`)'  {return {type:'InteractionNative',language:lang,code:esprima.parse(val.join(''))};}
+/// '(' elements:interactionElement* _ ')' {var temp=  mergeExpression(elements);return {type:'InteractionSimple',operator:temp.operator,operand:temp.operand};}
+= '(' elements:interactionElement* _ ')' {var temp=  mergeExpression(elements);return {type:'InteractionSimple',operator:temp.operator,operand:temp.operand};}
 
 interactionElement 'an interaction element'
 = _ operand:interaction {return {operand:operand};}
 / _ operator:operatorIdentifier {return {operator:operator};}
 
-language 'the name of a supported programming language'
-= 'js' / 'es6' / 'javascript' / 'c' / 'c++'
+//language 'the name of a supported programming language'
+//= 'js' / 'es6' / 'javascript' / 'c' / 'c++'
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -150,7 +150,7 @@ dataFunction 'the specification of a function type'
 // Literals and leaves of the AST
 
 operatorIdentifier 'an operator identifier'
-= val:[^ \t\r\n$_\(\)\`]+ { return val.join(''); }
+= val:[^ \t\r\n$\(\)]+ { return val.join(''); }
 
 interfaceIdentifier 'an interface identifier'
 = first:[A-Z] rest:[a-zA-Z0-9]* { return mergeElements(first,rest).join(''); }
@@ -163,6 +163,9 @@ variableIdentifier 'a variable identifier'
 
 keyIdentifier 'a key identifier'
 = first:[a-z0-9] rest:[a-zA-Z0-9]* { return mergeElements(first,rest).join(''); }
+
+functionIdentifier 'a C-compatible function identifier'
+= first:[a-zA-Z_] rest:[a-zA-Z0-9_]* { return mergeElements(first,rest).join(''); }
 
 _ 'white space'
 = [ \t\r\n]*

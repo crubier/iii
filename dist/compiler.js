@@ -4,6 +4,8 @@ var identifiers = require('./identifiers.js');
 var interactions = require('./interactions.js');
 var parser = require('./parser.js');
 var _ = require('lodash');
+var depgraph = require('dependency-graph').DepGraph;
+
 
 function compileToIii(source){
   return serializer.serialize(

@@ -1,1 +1,4 @@
-interaction (a):Number out is (js`o=5;`)
+interaction
+  (5):Number out
+is
+  (`return_5`)

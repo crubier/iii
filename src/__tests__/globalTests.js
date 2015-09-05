@@ -17,7 +17,7 @@ describe('iii', function() {
       "test",
       "test2",
       "justFct",
-      "testCase"
+      "testCase",
       // "testCase2"
     ];
 

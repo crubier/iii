@@ -1,4 +1,4 @@
 interaction
   (b):Number out
 is
-  ((#1) in (js`o=getB();`)(#0)=(#1))
+  ((#1) in (`getB`)(#0)=(#1))

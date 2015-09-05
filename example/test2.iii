@@ -3,16 +3,13 @@ interaction
 with
     interaction
       (b):Number out
-    with
-      interaction (res):Number out is (#b)
     is
-      ((res) in (js`o=5;`)(#1)=(res))
-
+      ((#b) in (`return5`)()=(#b))
     interaction
       ((x:Number in)+(y:Number in)):Number out
     with
       interaction (res):Number out is (#+(x)(y))
     is
-      ((res) in (js`o=i.x+i.y;`) ({x:(x),y:(y)}) = (res))
+      ((res) in (`sum`) ({x:(x),y:(y)}) = (res))
 is
   ((b)+(b))

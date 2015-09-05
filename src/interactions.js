@@ -271,10 +271,11 @@ function isBaseInteraction(interaction) {
         var theOperator = operator.parse(interaction.operator);
         switch (theOperator) {
           case "Composition":
-          case "Selection":
           case "Previous":
           case "FunctionApplication":
           case "Identifier":
+          case "Function":
+          case "Void":
             return true;
           case "Custom":
             return false;
