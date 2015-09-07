@@ -1,5 +1,9 @@
 # iii changelog
 
+# 0.1.4
+
+- Add iii.operator.parse()
+
 # 0.1.3
 
 - Fix
