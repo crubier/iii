@@ -37,7 +37,7 @@ function expand(interactionDefinition) {
 
   var interactionsToExpandAlongWithTheirMatchingDefinition;
 
-  // do {
+  do {
     interactionsToExpandAlongWithTheirMatchingDefinition =
       _.filter(
         _.map(listNonBaseInteractions(interaction),
@@ -55,7 +55,7 @@ function expand(interactionDefinition) {
     _.forEach(interactionsToExpandAlongWithTheirMatchingDefinition, function(x) {
       interaction = instantiate(interaction, x.definition);
     });
-  // } while (interactionsToExpandAlongWithTheirMatchingDefinition.length > 0);
+  } while (interactionsToExpandAlongWithTheirMatchingDefinition.length > 0);
 
   return {
     type: "Definition",
