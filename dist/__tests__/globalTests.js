@@ -18,7 +18,7 @@ describe('iii', function() {
       "test2",
       "justFct",
       "testCase",
-      // "testCase2"
+      "testCase2"
     ];
 
     _.forEach(list, function(x) {

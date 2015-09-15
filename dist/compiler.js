@@ -5,7 +5,13 @@ var interactions = require('./interactions.js');
 var parser = require('./parser.js');
 var _ = require('lodash');
 var depgraph = require('dependency-graph').DepGraph;
+var compilationResult = require('./compilerExampleResult.js');
 
+function compileToJs(source){
+  //TODO Actual compilation
+  if(source) return source;
+  else return compilationResult;
+}
 
 function compileToIii(source){
   return serializer.serialize(
@@ -57,5 +63,6 @@ function interactionToGraph(interaction){
 
 
 module.exports.compileToIii = compileToIii;
+module.exports.compileToJs = compileToJs;
 module.exports.compileToGraph = compileToGraph;
 module.exports.interactionToGraph = interactionToGraph;

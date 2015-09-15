@@ -1,5 +1,9 @@
 # iii changelog
 
+# 0.1.6
+
+- Added example compilation result WIMP hello world
+
 # 0.1.5
 
 - Fixed incomplete expanding of definitions
